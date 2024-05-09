@@ -1,10 +1,16 @@
-{
-    "name": "",
-    "email": "",
-    "piecesOfInterest": [
-        "piece 1",
-        "piece 2",
-        "piece 3"
-    ],
-    "memo": ""
-}
+[
+    {
+        "name": "name1",
+        "email": "email@email.com",
+        "phone": "1111111111",
+        "piecesOfInterest": ["piece 1", "piece 2", "piece 3"],
+        "message": "You're great!"
+    },
+    {
+        "name": "name2",
+        "email": "email2@email.com",
+        "phone": "5555555555",
+        "piecesOfInterest": ["piece 1", "piece 2", "piece 3"],
+        "message": "I also think you're great!"
+    }
+]
