@@ -2,7 +2,6 @@ import fs from 'fs';
 
 export class ContactRepository {
 
-
     constructor() {}
 
     public initContactRequestData = () => {
@@ -12,7 +11,22 @@ export class ContactRepository {
     }
 
     public addContactRequest = async (contactRequest: any) => {
-        // this.characterData.characters.push(character);
+
+        if (fs.existsSync('./files/contactData.json') /*&& db file exist*/) {
+            let contactData = JSON.parse(fs.readFileSync('./files/contactData.json', 'utf8'));
+            
+            contactData.push(contactRequest);
+            // console.log(contactRequest);
+            console.log(contactData);
+
+            // save contactData.json with file contents 
+        } else {
+            throw {
+                code: 500,
+                statusText: 'bad request',
+                message: 'Proper files not in place to add new contact request. Restart server or replace files to proceed.'
+            };
+        }
     }
 
     public returnAllContactRequests = () => {
