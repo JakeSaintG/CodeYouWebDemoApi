@@ -2,19 +2,22 @@ import fs from 'fs';
 
 export class ContactRepository {
 
+    private contactDataFileLocation = './src/files/contactData.json';
+    private contactDataTemplateLocation = './src/files/contactDataTemplate.json';
+
     constructor() {}
 
     public initContactRequestData = () => {
-        if (!fs.existsSync('./files/contactData.json') /*&& db file not exist*/) {
+        if (!fs.existsSync(this.contactDataFileLocation) /*&& db file not exist*/) {
             this.resetContactData();
         }
     }
 
     public addContactRequest = async (contactRequest: any) => {
-        if (fs.existsSync('./files/contactData.json') /*&& db file exist*/) {
-            let contactData = JSON.parse(fs.readFileSync('./files/contactData.json', 'utf8'));
+        if (fs.existsSync(this.contactDataFileLocation) /*&& db file exist*/) {
+            let contactData = JSON.parse(fs.readFileSync(this.contactDataFileLocation, 'utf8'));
             contactData.push(contactRequest);
-            fs.writeFileSync('./files/contactData.json', JSON.stringify(contactData, null, 2));
+            fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(contactData, null, 2));
         } else {
             console.log('error....')
             throw {
@@ -26,12 +29,12 @@ export class ContactRepository {
     }
 
     public returnAllContactRequests = () => {
-        return JSON.parse(fs.readFileSync('./files/contactData.json', 'utf8'));
+        return JSON.parse(fs.readFileSync(this.contactDataFileLocation, 'utf8'));
     };
 
     public resetContactData = async (): Promise<string> => {
-        if (fs.existsSync('./files/contactDataTemplate.json')) {
-            const templateJson = JSON.parse(fs.readFileSync('./files/contactDataTemplate.json', 'utf8'));
+        if (fs.existsSync(this.contactDataTemplateLocation )) {
+            const templateJson = JSON.parse(fs.readFileSync(this.contactDataTemplateLocation , 'utf8'));
             this.resetDbFromTemplateData();
             this.resetJsonFileFromTemplate(templateJson);
 
@@ -55,10 +58,10 @@ export class ContactRepository {
     private resetJsonFileFromTemplate = (templateJson: any) => {
         console.log('Creating or recreating JSON file from template.');
 
-        if (fs.existsSync('./files/contactData.json')) {
-            fs.rmSync('./files/contactData.json');
+        if (fs.existsSync(this.contactDataFileLocation)) {
+            fs.rmSync(this.contactDataFileLocation);
         } 
 
-        fs.writeFileSync('./files/contactData.json', JSON.stringify(templateJson, null, 2));
+        fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(templateJson, null, 2));
     }
 }

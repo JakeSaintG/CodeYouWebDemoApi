@@ -3,4 +3,4 @@ dist
 .env
 .DS_Store
 
-files/contactData.json
+src/files/contactData.json
