@@ -51,6 +51,10 @@ export class ContactRepository {
         }
     }
 
+    public testMe = () => {
+        return "pass";
+    }
+
     private resetDbFromTemplateData = () => {
         console.log('Dropping and resetting database from template.');
     }
