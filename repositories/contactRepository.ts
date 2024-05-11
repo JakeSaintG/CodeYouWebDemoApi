@@ -11,19 +11,15 @@ export class ContactRepository {
     }
 
     public addContactRequest = async (contactRequest: any) => {
-
         if (fs.existsSync('./files/contactData.json') /*&& db file exist*/) {
             let contactData = JSON.parse(fs.readFileSync('./files/contactData.json', 'utf8'));
-            
             contactData.push(contactRequest);
-            // console.log(contactRequest);
-            console.log(contactData);
-
-            // save contactData.json with file contents 
+            fs.writeFileSync('./files/contactData.json', JSON.stringify(contactData, null, 2));
         } else {
+            console.log('error....')
             throw {
                 code: 500,
-                statusText: 'bad request',
+                statusText: 'Server Error',
                 message: 'Proper files not in place to add new contact request. Restart server or replace files to proceed.'
             };
         }
@@ -34,18 +30,22 @@ export class ContactRepository {
     };
 
     public resetContactData = async (): Promise<string> => {
-        let response = 'Data for contacts successfully reset.';
-        
         if (fs.existsSync('./files/contactDataTemplate.json')) {
             const templateJson = JSON.parse(fs.readFileSync('./files/contactDataTemplate.json', 'utf8'));
             this.resetDbFromTemplateData();
             this.resetJsonFileFromTemplate(templateJson);
-        } else {
-            response = 'Template JSON file not found. Unable to set or reset contact data.';
-            console.error(response);
-        }
 
-        return response;
+            return 'Data for contacts successfully reset.';
+        } else {
+            const response = 'Template JSON file not found. Unable to set or reset contact data.';
+            console.error(response);
+
+            throw {
+                code: 500,
+                statusText: 'Server Error',
+                message: response
+            };
+        }
     }
 
     private resetDbFromTemplateData = () => {
