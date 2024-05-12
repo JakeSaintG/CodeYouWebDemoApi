@@ -1,18 +1,14 @@
-import express, {
-    Express,
-    NextFunction,
-    Request,
-    Response,
-    Router,
-    response
-} from "express";
-import dotenv from "dotenv";
-import { ContactRepository } from "./repositories/contactRepository";
-const cors = require("cors");
+import express, { Express, NextFunction, Request, Response, Router, response } from 'express';
+import dotenv from 'dotenv';
+import { ContactRepository } from './repositories/contactRepository';
+const cors = require('cors');
 
+// Get the configurable port from the .env file
 dotenv.config();
 const port = process.env.PORT;
 
+// Spin up an express server instance and enable all CORS Requests.
+// For more informaton on the CORS package, see here: https://expressjs.com/en/resources/middleware/cors.html
 const app: Express = express();
 app.use(express.json());
 app.use(cors());
@@ -20,44 +16,56 @@ app.use(cors());
 const contactRepository: ContactRepository = new ContactRepository();
 contactRepository.initContactRequestData();
 
+// For this API, it is necessary to enable multiple routes to get or send different data.
 const router: Router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-    res.send("Code:You API Demo");
+// If a GET request is made with no route specified, return 'Code:You API Demo'.
+router.get('/', (req: Request, res: Response) => {
+    res.send('Code:You API Demo');
 });
 
-router.get("/demo", (req: Request, res: Response) => {
-    const data = contactRepository.returnAllContactRequests();
+// If a GET request is made to the "contact" route, return all saved contact requests.
+router.get('/contact', (req: Request, res: Response) => {
+    try {
+        const response = contactRepository.returnAllContactRequests();
 
-    res.status(200).json({
-        status: 200,
-        statusText: "OK",
-        message: "Success",
-        data: data
-    });
+        res.status(response.code).json({
+            status: response.code,
+            statusText: response.statusText,
+            message: response.message,
+            data: response.data
+        });
+    } catch (error: unknown) {
+        res.status(500).json({
+            status: 500,
+            statusText: 'Internal Server Error',
+            message: error
+        });
+    }
 });
 
-router.post("/demo", (req: Request, res: Response, next: NextFunction) => {
+// If a POST request is made to the "contact" route, save the supplied contact request.
+router.post('/contact', (req: Request, res: Response, next: NextFunction) => {
     contactRepository
         .addContactRequest(req.body)
         .then((responseMessage) =>
-            res.status(201).json({
-                status: 201,
-                statusText: "OK",
-                message: "Successfully added contact request",
-                data: req.body
-            })
-        )
-        .catch((responseMessage) => {
             res.status(responseMessage.code).json({
                 status: responseMessage.code,
                 statusText: responseMessage.statusText,
                 message: responseMessage.message
+            })
+        )
+        .catch((error: unknown) => {
+            res.status(500).json({
+                status: 500,
+                statusText: 'Internal Server Error',
+                message: error
             });
         });
 });
 
-router.post("/reset", (req: Request, res: Response, next: NextFunction) => {
+// If a POST request is made to the "reset" route, reset the default contact request data.
+router.post('/reset', (req: Request, res: Response, next: NextFunction) => {
     contactRepository
         .resetContactData()
         .then((responseMessage) =>
@@ -67,16 +75,16 @@ router.post("/reset", (req: Request, res: Response, next: NextFunction) => {
                 message: responseMessage.message
             })
         )
-        .catch(() => {
+        .catch((error: unknown) => {
             res.status(500).json({
                 status: 500,
-                statusText: "Internal Server Error",
-                message: "An unknown error occured."
+                statusText: 'Internal Server Error',
+                message: error
             });
         });
 });
 
-app.use("/", router);
+app.use('/', router);
 
 let server = app.listen(port, () => {
     console.log(
@@ -84,13 +92,13 @@ let server = app.listen(port, () => {
     );
 });
 
-process.on("SIGINT", () => {
-    console.log("Exit command received. Closing server...");
+process.on('SIGINT', () => {
+    console.log('Exit command received. Closing server...');
     server.close();
 });
 
-process.on("uncaughtException", (error) => {
-    if (error.message.includes("EADDRINUSE")) {
+process.on('uncaughtException', (error) => {
+    if (error.message.includes('EADDRINUSE')) {
         console.error(
             `Port ${port} is already in use. \r\n` +
                 `Either alter the port in the .env or follow instructions in README to terminate the process using port ${port}.`

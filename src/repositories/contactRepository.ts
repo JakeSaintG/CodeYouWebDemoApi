@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { IResponse } from '../interfaces/IResponse';
+import { IContactRequest } from '../interfaces/IContactRequest';
 
 export class ContactRepository {
     private contactDataFileLocation = './src/files/contactData.json';
@@ -13,27 +14,71 @@ export class ContactRepository {
         }
     };
 
-    public addContactRequest = async (contactRequest: any) => {
-        if (fs.existsSync(this.contactDataFileLocation) /*&& db file exist*/) {
-            let contactData = JSON.parse(fs.readFileSync(this.contactDataFileLocation, 'utf8'));
-            contactData.push(contactRequest);
-            fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(contactData, null, 2));
-        } else {
-            throw {
+    // TODO: Write tests
+    public addContactRequest = async (contactRequest: any): Promise<IResponse> => {
+        // TODO: Ensure data is IContactResponse. If not, return 400
+
+        if (!fs.existsSync(this.contactDataFileLocation) /*&& db file not exist*/) {
+            return {
                 code: 500,
                 statusText: 'Server Error',
                 message:
                     'Proper files not in place to add new contact request. Restart server or replace files to proceed.'
             };
         }
+
+        /*
+            No need for elses. If the file above did not exist or the data was formatted incorrectly, the if block would return early.
+            If not, then the below return block would be hit. 
+        */
+        let contactData = JSON.parse(fs.readFileSync(this.contactDataFileLocation, 'utf8'));
+        contactData.push(contactRequest);
+        fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(contactData, null, 2));
+        return {
+            code: 201,
+            statusText: 'OK',
+            message: 'Successfully added contact request'
+        };
     };
 
-    public returnAllContactRequests = () => {
-        return JSON.parse(fs.readFileSync(this.contactDataFileLocation, 'utf8'));
+    // TODO: write tests
+    public returnAllContactRequests = (): IResponse => {
+        if (!fs.existsSync(this.contactDataFileLocation) /*&& db file not exist*/) {
+            return {
+                code: 500,
+                statusText: 'Server Error',
+                message:
+                    'Proper files not in place to add new contact request. Restart server or replace files to proceed.'
+            };
+        }
+        /*
+            No need for elses. If the file above did not exist or the data was formatted incorrectly, the if block would return early.
+            If not, then the below return block would be hit. 
+        */
+        const contactData: IContactRequest = JSON.parse(
+            fs.readFileSync(this.contactDataFileLocation, 'utf8')
+        );
+
+        return {
+            code: 201,
+            statusText: 'OK',
+            message: 'Successfully returned contact requests',
+            data: contactData
+        };
+
     };
 
     public resetContactData = async (): Promise<IResponse> => {
-        if (fs.existsSync(this.contactDataTemplateLocation)) {
+        if (!fs.existsSync(this.contactDataTemplateLocation)) {
+            const response = 'Template JSON file not found. Unable to set or reset contact data.';
+            console.log(response);
+
+            return {
+                code: 500,
+                statusText: 'Server Error',
+                message: response
+            };
+        } else {
             const templateJson = JSON.parse(
                 fs.readFileSync(this.contactDataTemplateLocation, 'utf8')
             );
@@ -45,18 +90,10 @@ export class ContactRepository {
                 statusText: 'OK',
                 message: 'Data for contacts successfully reset.'
             };
-        } else {
-            const response = 'Template JSON file not found. Unable to set or reset contact data.';
-            console.log(response);
-
-            return {
-                code: 500,
-                statusText: 'Server Error',
-                message: response
-            };
         }
     };
 
+    // TODO: Do this
     private resetDbFromTemplateData = () => {
         console.log('Dropping and resetting database from template.');
     };
