@@ -33,6 +33,7 @@ export class ContactRepository {
         */
         let contactData = JSON.parse(fs.readFileSync(this.contactDataFileLocation, 'utf8'));
         contactData.push(contactRequest);
+        
         fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(contactData, null, 2));
         return {
             code: 201,
@@ -82,7 +83,7 @@ export class ContactRepository {
             const templateJson = JSON.parse(
                 fs.readFileSync(this.contactDataTemplateLocation, 'utf8')
             );
-            this.resetDbFromTemplateData();
+            this.resetDbFromTemplate();
             this.resetJsonFileFromTemplate(templateJson);
 
             return {
@@ -94,7 +95,7 @@ export class ContactRepository {
     };
 
     // TODO: Do this
-    private resetDbFromTemplateData = () => {
+    private resetDbFromTemplate = () => {
         console.log('Dropping and resetting database from template.');
     };
 

@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response, Router, response } from 'express';
 import dotenv from 'dotenv';
 import { ContactRepository } from './repositories/contactRepository';
+import { DbUtils } from '../utils/dbutils';
 const cors = require('cors');
 
 // Get the configurable port from the .env file
@@ -15,6 +16,9 @@ app.use(cors());
 
 const contactRepository: ContactRepository = new ContactRepository();
 contactRepository.initContactRequestData();
+
+const db = new DbUtils();
+db.createDbContext();
 
 // For this API, it is necessary to enable multiple routes to get or send different data.
 const router: Router = express.Router();
