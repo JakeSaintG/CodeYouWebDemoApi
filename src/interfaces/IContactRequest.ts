@@ -5,6 +5,7 @@
         https://www.typescriptlang.org/play/?#example/types-vs-interfaces
 */
 export interface IContactRequest {
+    id: string,
     name: string;
     email: string;
     phone: string;

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { IResponse } from '../interfaces/IResponse';
 import { IContactRequest } from '../interfaces/IContactRequest';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ContactRepository {
     private contactDataFileLocation = './src/files/contactData.json';
@@ -15,7 +16,7 @@ export class ContactRepository {
     };
 
     // TODO: Write tests
-    public addContactRequest = async (contactRequest: any): Promise<IResponse> => {
+    public addContactRequest = async (contactRequest: IContactRequest): Promise<IResponse> => {
         // TODO: Ensure data is IContactResponse. If not, return 400
 
         if (!fs.existsSync(this.contactDataFileLocation) /*&& db file not exist*/) {
@@ -32,6 +33,7 @@ export class ContactRepository {
             If not, then the below return block would be hit. 
         */
         let contactData = JSON.parse(fs.readFileSync(this.contactDataFileLocation, 'utf8'));
+        contactRequest.id = uuidv4()
         contactData.push(contactRequest);
         
         fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(contactData, null, 2));
