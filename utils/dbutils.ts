@@ -25,6 +25,16 @@ export class DbUtils {
         
     }
 
+
+
+
+// NEED TO PREVENT SQL INJECTION AS WELL
+
+
+
+
+
+
     public createDbContext = () => {
         this.dbContext = new sqlite.Database('./contacts.db', (error: Error | null) => {
             if (error) {
@@ -44,8 +54,4 @@ export class DbUtils {
             }
         });
     }
-
-
-
-
 }
