@@ -3,4 +3,5 @@ build
 .env
 .DS_Store
 
+contacts.db
 src/files/contactData.json
