@@ -14,11 +14,9 @@ const app: Express = express();
 app.use(express.json());
 app.use(cors());
 
-const contactRepository: ContactRepository = new ContactRepository();
+const dbUtils = new DbUtils();
+const contactRepository: ContactRepository = new ContactRepository(dbUtils);
 contactRepository.initContactRequestData();
-
-const db = new DbUtils();
-db.createDbContext();
 
 // For this API, it is necessary to enable multiple routes to get or send different data.
 const router: Router = express.Router();

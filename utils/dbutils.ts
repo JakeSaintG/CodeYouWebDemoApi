@@ -1,5 +1,6 @@
-import sqlite from 'sqlite3';
+import sqlite from 'better-sqlite3';
 import { v4 as uuidv4 } from 'uuid';
+import { IContactRequest } from '../src/interfaces/IContactRequest';
 
 export class DbUtils {
     
@@ -12,7 +13,7 @@ export class DbUtils {
                 In SQLite, the max size of a VARCHAR column is not enforced and not specifying is valid in a create statement.
     */
     private createContactsTable: string = `
-        CREATE TABLE contacts (
+        CREATE TABLE IF NOT EXISTS contacts (
             contact_id VARCHAR(36) PRIMARY KEY NOT NULL,
             name VARCHAR NOT NULL,
             email VARCHAR NOT NULL,
@@ -21,37 +22,34 @@ export class DbUtils {
         ) 
     `;
 
-    constructor() {
+    constructor() { }
+
+
+    public insertNewContactRequest = (contactReq: IContactRequest) => {
+        const piecesOfInterest = contactReq.piecesOfInterest.join('||');
         
+        const insert = 'INSERT INTO contacts (contact_id, name, email, pieces_of_interest, message) VALUES (?,?,?,?,?)';
+        this.dbContext.prepare(insert).run([contactReq.id, contactReq.name, contactReq.email, piecesOfInterest, contactReq.message]);
     }
 
+    public dropContactRequests = () => {
+        this.dbContext.exec('DROP TABLE IF EXISTS contacts;');
+    }
 
+    public createAndPopulateContactsTable = (fileFound: boolean, templateJson: any) => {
 
+        if (!fileFound) {
+            this.setDbContext();
+        }
 
-// NEED TO PREVENT SQL INJECTION AS WELL
+        this.dbContext.prepare(this.createContactsTable).run();
 
-
-
-
-
-
-    public createDbContext = () => {
-        this.dbContext = new sqlite.Database('./contacts.db', (error: Error | null) => {
-            if (error) {
-                console.error(`Error opening database: ${error.message}`);
-            } else {
-        
-                this.dbContext.run(this.createContactsTable, (err: Error | null) => {
-
-                    if (err && !err.message.includes("already exists")) {
-                        console.log(err.message);
-                    }
-                    let insert = 'INSERT INTO contacts (contact_id, name, email) VALUES (?,?,?)';
-                    this.dbContext.run(insert, [uuidv4(), "name", "email", "['piece one,'piece two']", "message"]);
-                    this.dbContext.run(insert, [uuidv4(), "name", "email", "['piece one,'piece two']", "message"]); 
-                    this.dbContext.run(insert, [uuidv4(), "name", "email", "['piece one,'piece two']", "message"]); 
-                });
-            }
+        templateJson.forEach((contactReq: IContactRequest) => { 
+            this.insertNewContactRequest(contactReq);
         });
+    }
+
+    public setDbContext = () => {
+        this.dbContext = new sqlite('./contacts.db');
     }
 }
