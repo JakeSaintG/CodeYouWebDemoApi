@@ -100,7 +100,7 @@ export class ContactRepository {
         return {
             code: 200,
             statusText: 'OK',
-            message: 'Successfully returned contact requests',
+            message: `Successfully retrieved ${contactData.length} contact requests`,
             data: contactData
         };
     };
