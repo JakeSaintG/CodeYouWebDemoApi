@@ -54,7 +54,8 @@ router.post('/contact', (req: Request, res: Response, next: NextFunction) => {
             res.status(responseMessage.code).json({
                 status: responseMessage.code,
                 statusText: responseMessage.statusText,
-                message: responseMessage.message
+                message: responseMessage.message,
+                data: responseMessage.data
             })
         )
         .catch((error: unknown) => {
@@ -66,7 +67,7 @@ router.post('/contact', (req: Request, res: Response, next: NextFunction) => {
         });
 });
 
-// If a POST request is made to the "reset" route, reset the default contact request data.
+// If a POST request is made to the "reset" route, reset to the default contact request data.
 router.post('/reset', (req: Request, res: Response, next: NextFunction) => {
     contactRepository
         .resetContactData()
@@ -86,16 +87,36 @@ router.post('/reset', (req: Request, res: Response, next: NextFunction) => {
         });
 });
 
+// If a DELETE request is made to the "clear" route, clear all data that is stored.
+router.delete('/clearAll', (req: Request, res: Response, next: NextFunction) => {
+    contactRepository
+        .clearContactData()
+        .then((responseMessage) =>
+            res.status(responseMessage.code).json({
+                status: responseMessage.code,
+                statusText: responseMessage.statusText,
+                message: responseMessage.message
+            })
+        )
+        .catch((error: unknown) => {
+            res.status(500).json({
+                status: 500,
+                statusText: 'Internal Server Error',
+                message: error
+            });
+        });
+});
+
 app.use('/', router);
 
-let server = app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(
         `[server]: Server is running at http://localhost:${port}. You are now able to make calls to it.`
     );
 });
 
 process.on('SIGINT', () => {
-    console.log('Exit command received. Closing server...');
+    console.log(' - Exit command received. Closing server...');
     server.close();
 });
 

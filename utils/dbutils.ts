@@ -1,5 +1,4 @@
 import sqlite from 'better-sqlite3';
-import { v4 as uuidv4 } from 'uuid';
 import { IContactRequest } from '../src/interfaces/IContactRequest';
 
 export class DbUtils {
@@ -8,8 +7,8 @@ export class DbUtils {
 
     /*
         Create table:
-            For the contact_id, it is totally valid to use an auto-incrementing ID instead of manually assigning one
-            Notice that the rest of the columns do not specify a character length.
+            For the contact_id, it is totally valid to use an auto-incrementing ID instead of manually assigning one.
+            Also, notice that all of the columns besides contact_id do not specify a character length.
                 In SQLite, the max size of a VARCHAR column is not enforced and not specifying is valid in a create statement.
     */
     private createContactsTable: string = `
@@ -24,10 +23,8 @@ export class DbUtils {
 
     constructor() { }
 
-
     public insertNewContactRequest = (contactReq: IContactRequest) => {
         const piecesOfInterest = contactReq.piecesOfInterest.join('||');
-        
         const insert = 'INSERT INTO contacts (contact_id, name, email, pieces_of_interest, message) VALUES (?,?,?,?,?)';
         this.dbContext.prepare(insert).run([contactReq.id, contactReq.name, contactReq.email, piecesOfInterest, contactReq.message]);
     }
@@ -36,7 +33,11 @@ export class DbUtils {
         this.dbContext.exec('DROP TABLE IF EXISTS contacts;');
     }
 
-    public createAndPopulateContactsTable = (fileFound: boolean, templateJson: any) => {
+    public deleteContactRequests = () => {
+        this.dbContext.exec('DELETE FROM contacts;')
+    }
+
+    public createAndPopulateContactsTable = (fileFound: boolean, templateJson: IContactRequest[]) => {
 
         if (!fileFound) {
             this.setDbContext();

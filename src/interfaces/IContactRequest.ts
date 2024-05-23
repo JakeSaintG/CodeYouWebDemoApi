@@ -5,10 +5,9 @@
         https://www.typescriptlang.org/play/?#example/types-vs-interfaces
 */
 export interface IContactRequest {
-    id: string,
+    id?: string, // Optional member; assigned later
     name: string;
     email: string;
-    phone: string;
     piecesOfInterest: string[];
     message: string;
 }

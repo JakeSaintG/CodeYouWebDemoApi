@@ -20,19 +20,40 @@ export class ContactRepository {
         this.dbUtils.setDbContext(); 
     };
 
-    // TODO: Write tests
-    public addContactRequest = async (contactRequest: IContactRequest): Promise<IResponse> => {
-        // TODO: Ensure data is IContactResponse. If not, return 400
+    // Throw error if required fields are not present.
+    private validateContactRequest = (potentialContact: any): IContactRequest => {
 
-        // Return early if there is an error with the expected files.
-        if (!fs.existsSync(this.contactDataFileLocation) || !fs.existsSync('./contacts.db')) {
+        if ('name' in potentialContact && 'email' in potentialContact && 'piecesOfInterest' in potentialContact && 'message' in potentialContact) {
+            // Strip out any unnecessary fields. Ex: Phone number or if an ID is assigned from the front end.
             return {
-                code: 500,
-                statusText: 'Server Error',
-                message:
-                    'Proper files not in place to add new contact request. Restart server or replace files to proceed.'
+                name: potentialContact.name,
+                email: potentialContact.email,
+                piecesOfInterest: potentialContact.piecesOfInterest,
+                message: potentialContact.message
             };
         }
+        
+        throw new Error("Bad Request");
+    }
+
+    // TODO: Write tests
+    public addContactRequest = async (request: IContactRequest): Promise<IResponse> => {
+        // Return early if not valid contact request.
+        let contactRequest: IContactRequest;
+        try {
+            contactRequest = this.validateContactRequest(request);
+        } catch (error) {
+            return {
+                code: 400,
+                statusText: 'Bad Request',
+                message:
+                    'Invalid Contact Request.'
+            };
+        }
+
+        // Return early if there is an error with the expected files.
+        const dataFilesError = this.ensureDataFilesExist();
+        if (dataFilesError !== undefined) return dataFilesError;
         
         // Generate unique ID for easy retrival later.
         contactRequest.id = uuidv4();
@@ -45,25 +66,20 @@ export class ContactRepository {
         contactData.push(contactRequest);
         fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(contactData, null, 2));
 
+        // Return success with contactRequest data so frontend can utilize assigned ID. 
         return {
             code: 201,
             statusText: 'OK',
-            message: 'Successfully added contact request'
+            message: `Successfully added contact request with id ${contactRequest.id}`,
+            data: contactRequest
         };
     };
 
-    // TODO: write tests
     public returnAllContactRequests = (): IResponse => {
         
         // Return early if there is an error with the expected files.
-        if (!fs.existsSync(this.contactDataFileLocation) || !fs.existsSync('./contacts.db')) {
-            return {
-                code: 500,
-                statusText: 'Server Error',
-                message:
-                    'Proper files not in place to add new contact request. Restart server or replace files to proceed.'
-            };
-        }
+        const dataFilesError = this.ensureDataFilesExist();
+        if (dataFilesError !== undefined) return dataFilesError;
 
         const contactData: IContactRequest = JSON.parse(
             fs.readFileSync(this.contactDataFileLocation, 'utf8')
@@ -88,23 +104,39 @@ export class ContactRepository {
                 statusText: 'Server Error',
                 message: response
             };
-        } else {
-            const templateJson = JSON.parse(
-                fs.readFileSync(this.contactDataTemplateLocation, 'utf8')
-            );
-
-            this.resetJsonFromTemplate(templateJson);
-            this.resetDbFromTemplate(templateJson);
-
-            return {
-                code: 201,
-                statusText: 'OK',
-                message: 'Data for contacts successfully reset.'
-            };
         }
+
+        const templateJson = JSON.parse(
+            fs.readFileSync(this.contactDataTemplateLocation, 'utf8')
+        );
+
+        this.resetJsonFromTemplate(templateJson);
+        this.resetDbFromTemplate(templateJson);
+
+        return {
+            code: 201,
+            statusText: 'OK',
+            message: 'Data for contacts successfully reset.'
+        };
     };
 
-    private resetDbFromTemplate = (templateJson: any) => {
+    // TODO: Write tests
+    public clearContactData = async (): Promise<IResponse> =>  {
+
+        const dataFilesError = this.ensureDataFilesExist();
+        if (dataFilesError !== undefined) return dataFilesError;
+
+        fs.writeFileSync(this.contactDataFileLocation, JSON.stringify([], null, 2));
+        this.dbUtils.deleteContactRequests();
+
+        return {
+            code: 201,
+            statusText: 'OK',
+            message: 'Data for contacts successfully cleared.'
+        };
+    }
+
+    private resetDbFromTemplate = (templateJson: IContactRequest[]) => {
         console.log('Dropping and resetting database from template.');
         
         let fileFound: boolean = false;
@@ -117,7 +149,7 @@ export class ContactRepository {
         this.dbUtils.createAndPopulateContactsTable(fileFound, templateJson);
     }; 
 
-    private resetJsonFromTemplate = (templateJson: any) => {
+    private resetJsonFromTemplate = (templateJson: IContactRequest[]) => {
         console.log('Creating or recreating JSON file from template.');  
 
         if (fs.existsSync(this.contactDataFileLocation)) {
@@ -126,4 +158,15 @@ export class ContactRepository {
 
         fs.writeFileSync(this.contactDataFileLocation, JSON.stringify(templateJson, null, 2));
     };
+
+    public ensureDataFilesExist = (): IResponse | undefined => {
+        if (!fs.existsSync(this.contactDataFileLocation) || !fs.existsSync('./contacts.db')) {
+            return {
+                code: 500,
+                statusText: 'Server Error',
+                message:
+                    'Proper files not in place. POST to the reset endpoint, restart server, or replace files to proceed.'
+            };
+        }
+    }
 }
