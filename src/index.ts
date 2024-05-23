@@ -29,7 +29,8 @@ router.get('/', (req: Request, res: Response) => {
 // If a GET request is made to the "contact" route, return all saved contact requests.
 router.get('/contact', (req: Request, res: Response) => {
     try {
-        const response = contactRepository.returnAllContactRequests();
+        const retrievalSource = process.env.RETRIEVE_FROM;
+        const response = contactRepository.returnAllContactRequests(retrievalSource);
 
         res.status(response.code).json({
             status: response.code,
