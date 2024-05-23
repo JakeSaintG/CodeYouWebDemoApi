@@ -1,26 +1,30 @@
 [
     {
-        "name": "name1",
-        "email": "email@email.com",
-        "phone": "1111111111",
+        "name": "Leonardo",
+        "email": "Leo@turtlemail.com",
         "piecesOfInterest": ["piece 1", "piece 2", "piece 3"],
-        "message": "You're great!",
+        "message": "I am also interested in the Mona Lisa.",
         "id": "4492c0f9-d7ba-4ea7-842d-dce6943a6d7e"
     },
     {
-        "name": "name2",
-        "email": "email2@email.com",
-        "phone": "5555555555",
+        "name": "Donatello",
+        "email": "donny@turtlemail.com",
         "piecesOfInterest": ["piece 1", "piece 2", "piece 3"],
-        "message": "I also think you're great!",
+        "message": "I am also interested in The Feast of Herod.",
         "id": "7159439c-1d2f-4673-8367-6242d856e2c0"
     },
     {
-        "name": "name3",
-        "email": "email3@email.com",
-        "phone": "5555555555",
+        "name": "Raphael",
+        "email": "raph@turtlemail.com",
         "piecesOfInterest": ["piece 1", "piece 2", "piece 3"],
-        "message": "I super think you're great!",
+        "message": "I am also interested in the Portrait of a Man.",
         "id": "2a037d20-1dc2-4117-8f9a-a39ab05c769f"
+    },
+    {
+        "name": "Michelangelo",
+        "email": "mikey@turtlemail.com",
+        "piecesOfInterest": ["piece 1", "piece 2", "piece 3"],
+        "message": "I am also interested in the Statue of David.",
+        "id": "e902b3b3-704f-441d-8866-4a30304721ce"
     }
 ]
