@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: arial, sans-serif;
 }
 
 body {
@@ -8,7 +9,7 @@ body {
 
 header {
     text-align: center;
-    background-color: #881F48;
+    background-color: #881f48;
     color: white;
     margin: 0;
     padding: 1rem 0 0 0;
@@ -24,25 +25,45 @@ nav {
     justify-content: space-between;
 }
 
-nav p,
 nav a {
     text-decoration: none;
     color: #ffffff;
     font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+    padding: 1rem;
+
+    border: solid red 1px;
 }
 
-.server-details {
+.server_details {
     display: flex;
     justify-content: space-between;
     padding: 1rem;
 }
 
-.server-healthy {
+.server_healthy {
     background-color: rgb(143, 239, 143);
 }
 
-.server-unhealthy {
+.server_unhealthy {
     background-color: rgb(239, 143, 143);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }
 
 /* 

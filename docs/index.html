@@ -10,14 +10,14 @@
         <header>
             <h1>Contact Request API Documentation</h1>
             <nav>
-                <p><a href="#">CodeYou</a></p>
-                <p><a href="#">GitHub</a></p>
-                <p><a href="#">Rest Fundamentals</a></p>
-                <p>View Data</p>
+                <a href="https://code-you.org/">Code:You</a>
+                <a href="https://github.com/JakeSaintG/CodeYouWebDemoApi">GitHub</a>
+                <a href="https://restful-api.dev/rest-fundamentals/">Rest Fundamentals</a>
+                <a href="#" onclick="showData(true)">View Data</a>
             </nav>
         </header>
-        <div class="server-details">
-            <span id="server-status"></span>
+        <div class="server_details">
+            <span id="server_status"></span>
             <div>
                 <button onclick="clearData()">Clear Data</button>
                 <button onclick="resetData()">Reset Data To Default</button>
@@ -52,9 +52,16 @@
         </section>
 
         <section>
-            <h2>D Contact Request</h2>
+            <h2>Restore to Default Contact Request</h2>
         </section>
 
+
+        <dialog>
+            <h2>Data</h2> 
+            <div id="contact_request_data"></div>
+            <button autofocus onclick="showData(false)">Close</button>
+        </dialog>
         <script src="docs-app.js"></script>
     </body>
+
 </html>
