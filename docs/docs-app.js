@@ -3,6 +3,7 @@ let pingInterval = 0;
 let serverPreviouslyHealthy = false;
 const serverStatus = document.getElementById('server_status');
 const dialog = document.querySelector('dialog');
+const contactRequestData = document.getElementById('contact_request_data');
 
 const checkPing = () => {
     const check = setInterval(() => {
@@ -58,6 +59,7 @@ const showData = (show) => {
         return;
     }
     dialog.close();
+    contactRequestData.innerHTML = '';
 };
 
 const getData = () => {
@@ -65,10 +67,14 @@ const getData = () => {
         .then(async (r) => await r.json())
         .then((json) => {
             const htmlTable = generateHtmlTable(json.data);
-            document.getElementById('contact_request_data').appendChild(htmlTable);
+            contactRequestData.appendChild(htmlTable);
         });
 };
 
+const refreshTableData = () => {
+    contactRequestData.innerHTML = '';
+    getData();
+};
 
 const generateHtmlTable = (jsonData) => {
     const table = document.createElement('table');
@@ -95,7 +101,7 @@ const generateHtmlTable = (jsonData) => {
     });
 
     return table;
-}
+};
 
 const camelCaseToWords = (camelCase) => {
     const wordsSplit = camelCase.replace(/([A-Z])/g, ' $1');
