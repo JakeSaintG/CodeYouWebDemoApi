@@ -3,8 +3,6 @@ import cors from 'cors';
 // Allow async handlers to cleanly throw errors to the global error handler.
 import 'express-async-errors';
 import Routes from './routes';
-import { ContactRequestsCollection } from './collections/contact-requests';
-import { setDbContext } from './data/contact-requests';
 
 const port = process.env.PORT;
 
@@ -13,13 +11,6 @@ const port = process.env.PORT;
 const app: Express = express();
 app.use(express.json());
 app.use(cors());
-
-// Initialize the sqlite db context for use later
-// setDbContext();
-
-// Initialize the default contact request data
-const contactRepository: ContactRequestsCollection = new ContactRequestsCollection();
-contactRepository.initContactRequestData();
 
 app.use('/', Routes);
 
