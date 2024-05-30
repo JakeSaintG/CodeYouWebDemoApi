@@ -15,15 +15,25 @@ export class JsonTable<E> {
         this.defaultDataFileLocation = defaultDataFileLocation;
     }
 
+    init() {
+        if (!fs.existsSync(this.fileLocation)) {
+            this.write(this.readDefaults());
+        }
+    }
+
     readDefaults(): E[] {
         if (!fs.existsSync(this.defaultDataFileLocation)) {
-            throw new Error('Template JSON file not found.');
+            throw new Error('Template JSON file not found - please replace this file and restart the server. Ask a mentor for the file if you do not have a copy.');
         }
 
         return JSON.parse(fs.readFileSync(this.defaultDataFileLocation, 'utf8'));
     }
 
     read(): E[] {
+        if (!fs.existsSync(this.fileLocation)) {
+            throw new Error(`Data JSON file '${this.fileLocation}' not in place. POST to the reset endpoint, restart server, or replace files to proceed.`)
+        }
+
         return JSON.parse(fs.readFileSync(this.fileLocation, 'utf8'));
     }
 

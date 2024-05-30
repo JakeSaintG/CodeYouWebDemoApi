@@ -1,5 +1,4 @@
 import express, { Express } from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 // Allow async handlers to cleanly throw errors to the global error handler.
 import 'express-async-errors';
@@ -7,8 +6,6 @@ import Routes from './routes';
 import { ContactRequestsCollection } from './collections/contact-requests';
 import { setDbContext } from './data/contact-requests';
 
-// Get the configurable port from the .env file
-dotenv.config();
 const port = process.env.PORT;
 
 // Spin up an express server instance and enable all CORS Requests.

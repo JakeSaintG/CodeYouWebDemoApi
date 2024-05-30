@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import ContactRoutes from './contact-requests';
-import { CollectionError } from '../utils/collection-error';
+import { HTTPError } from '../utils/http-error';
 
 // For this API, it is necessary to enable multiple routes to get or send different data.
 const router: Router = express.Router();
@@ -13,10 +13,19 @@ router.get('/', (req: Request, res: Response) => {
 
 router.use('/contact-requests', ContactRoutes);
 
+/*
+    This bit will catch any errors thrown in our routes.
+    We can then inspect them to see if they are of type HTTPError, and respect the proposed code if
+    it is!
+
+    Either way - we can send the stack trace if it exists on the error, and use message as a backup.
+
+    If all else fails - we send a generic error response.
+ */
 router.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
     console.error(error);
 
-    if (error instanceof CollectionError) {
+    if (error instanceof HTTPError) {
         res.status(error.code).contentType('text/plain').send(error.stack || error.message);
         next();
         return;

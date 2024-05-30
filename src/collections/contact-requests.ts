@@ -1,16 +1,9 @@
-import fs from 'fs';
-import type { ContactRequest } from '../types/contact-request';
 import { v4 as uuidv4 } from 'uuid';
-// import * as DbUtils from '../data/contact-requests';
-import { CollectionError } from '../utils/collection-error';
+import { Env } from '../env';
+import type { ContactRequest } from '../types/contact-request';
+import * as DbUtils from '../data/contact-requests';
+import { HTTPError } from '../utils/http-error';
 import { JsonTable } from '../utils/json-table';
-import { ContactRequestsTable } from '../data/contact-requests-table';
-
-const RETRIEVAL_SOURCE = process.env.RETRIEVE_FROM?.toLowerCase() as 'json' | 'database' | undefined;
-
-if (RETRIEVAL_SOURCE !== 'json' && RETRIEVAL_SOURCE !== 'database' && RETRIEVAL_SOURCE) {
-    throw new Error('RETRIEVE_FROM environment variable must be set to "json" or "database"');
-}
 
 // Set the JSON db parallel to the SQLite db. Normally, set variables with camelCase - but for
 // stylistic reasons to match DbUtils, we'll use PascalCase here!
@@ -18,18 +11,6 @@ export const JsonUtils = new JsonTable<ContactRequest>({
     fileLocation: './files/contactData.json',
     defaultDataFileLocation: './files/contactDataDefault.json'
 });
-export const DbUtils = new ContactRequestsTable({
-    fileLocation: './files/contactRequests.db'
-});
-
-const ensureDataFilesExist = () => {
-    if (!fs.existsSync(JsonUtils.fileLocation) || !fs.existsSync(DbUtils.fileLocation)) {
-        throw new CollectionError({
-            code: 500,
-            message: 'Proper files not in place. POST to the reset endpoint, restart server, or replace files to proceed.'
-        })
-    }
-}
 
 // Throw error if required fields are not present.
 export const castObjectToContactRequest = (input: any): ContactRequest => {
@@ -50,7 +31,7 @@ export const castObjectToContactRequest = (input: any): ContactRequest => {
         };
     }
 
-    throw new CollectionError({
+    throw new HTTPError({
         code: 400,
         message: 'Cannot transform object to ContactRequest. Missing required fields.'
     });
@@ -58,18 +39,15 @@ export const castObjectToContactRequest = (input: any): ContactRequest => {
 
 export class ContactRequestsCollection {
     public initContactRequestData = () => {
-        DbUtils.setDbContext();
-        if (!fs.existsSync(JsonUtils.fileLocation) || !fs.existsSync(DbUtils.fileLocation)) {
-            this.resetContactData();
-        }
+        JsonUtils.init();
+        DbUtils.init({
+            defaultData: JsonUtils.readDefaults()
+        });
     };
 
     public addContactRequest = async (input: unknown): Promise<ContactRequest> => {
         // Return early if not valid contact request.
         const contactRequest: ContactRequest = castObjectToContactRequest(input);
-
-        // Throw early if there is an error with the expected files.
-        ensureDataFilesExist();
 
         // Generate unique ID for easy retrieval later.
         contactRequest.id = uuidv4();
@@ -86,18 +64,12 @@ export class ContactRequestsCollection {
 
     // Use a string literal to specify the exact value of a string!
     public returnAllContactRequests = (): ContactRequest[] => {
-        // Throw early if there is an error with the expected files.
-        ensureDataFilesExist();
-
-        if (RETRIEVAL_SOURCE === 'database' || undefined) {
+        if (Env.RETRIEVE_FROM === 'database') {
             return DbUtils.selectAllContactRequests();
-        } else if (RETRIEVAL_SOURCE === 'json') {
+        } else if (Env.RETRIEVE_FROM === 'json') {
             return JsonUtils.read();
         } else {
-            throw new CollectionError({
-                code: 500,
-                message: 'Error in data retrieval configuration. Ensure RETRIEVE_FROM field in .env file is set to "database" or "json".'
-            });
+            throw new Error(`Error in data retrieval configuration. Ensure RETRIEVE_FROM field in .env file is set to "database" or "json".`);
         }
     };
 
@@ -110,8 +82,6 @@ export class ContactRequestsCollection {
     };
 
     public clearContactData = (): void => {
-        ensureDataFilesExist();
-
         // Write over contactData.json with an empty array.
         JsonUtils.clear();
 
@@ -122,13 +92,7 @@ export class ContactRequestsCollection {
     private resetDb = (newData: ContactRequest[]) => {
         console.log('Dropping and resetting database from template.');
 
-        console.log('resetDb');
-        if (fs.existsSync(DbUtils.fileLocation)) {
-            DbUtils.dropContactRequests();
-        }
-
-        console.log('create and populate');
-        DbUtils.createAndPopulateContactsTable(newData);
+        DbUtils.resetContactRequests(newData);
     };
 
     private resetJson = (newData: ContactRequest[]) => {

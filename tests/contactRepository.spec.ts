@@ -8,7 +8,7 @@ import * as DbUtils from '../src/data/contact-requests';
 */
 jest.mock('fs');
 const mockFS: jest.Mocked<typeof fs> = <jest.Mocked<typeof fs>>fs;
-jest.mock('../src/utils/dbutils')
+jest.mock('../src/data/contact-requests');
 const mockDbUtils: jest.Mocked<typeof DbUtils> = <jest.Mocked<typeof DbUtils>>DbUtils;
 /*
     The AAA patten is commonly used in unit tests.
@@ -20,17 +20,16 @@ it('should return an error if template file not present when resetting data', ()
     //Arrange
     const contactRepository = new ContactRequestsCollection();
     mockFS.existsSync.mockReturnValue(false);
-    const expectedCode = 500;
-    const expectedMessage = 'Proper files not in place. POST to the reset endpoint, restart server, or replace files to proceed.';
 
     //Act
-    const SystemUnderTest = contactRepository.ensureDataFilesExist() as IResponse;
+    const act = () => {
+        contactRepository.resetContactData();
+    };
+
 
     //Assert
-    const actualCode = SystemUnderTest.code;
-    const actualMessage = SystemUnderTest.message;
-    expect(actualCode).toEqual(expectedCode);
-    expect(actualMessage).toEqual(expectedMessage);
+    expect(act).toThrow(Error);
+    expect(act).toThrow('Template JSON file not found - please replace this file and restart the server. Ask a mentor for the file if you do not have a copy.');
 });
 
 /*
