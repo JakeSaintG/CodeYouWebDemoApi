@@ -26,6 +26,14 @@ router.get('/', (req: Request, res: Response) => {
     res.send('Code:You API Demo');
 });
 
+router.get('/ping', (req: Request, res: Response) => {
+    res.status(200).json({
+        status: 200,
+        statusText: 'OK',
+        message: 'Healthy.'
+    });
+});
+
 // If a GET request is made to the "contact" route, return all saved contact requests.
 router.get('/contact', (req: Request, res: Response) => {
     try {

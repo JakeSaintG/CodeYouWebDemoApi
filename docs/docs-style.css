@@ -1,0 +1,54 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+header {
+    text-align: center;
+    background-color: #881F48;
+    color: white;
+    margin: 0;
+    padding: 1rem 0 0 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    padding: 0 1rem;
+    justify-content: space-between;
+}
+
+nav p,
+nav a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.server-details {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.server-healthy {
+    background-color: rgb(143, 239, 143);
+}
+
+.server-unhealthy {
+    background-color: rgb(239, 143, 143);
+}
+
+/* 
+
+    media query for nav
+    - move to left when desktop size
+    - above is good for tablet
+    - hamburger for mobile
+*/
