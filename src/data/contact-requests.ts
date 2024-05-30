@@ -7,7 +7,7 @@ import sqlite from 'better-sqlite3';
 // it as something to look into if you ever scale up!
 let dbContext: sqlite.Database;
 
-export const fileLocation = './contact-requests.db';
+export const fileLocation = './contactRequests.db';
 
 export const setDbContext = () => {
     dbContext = new sqlite(fileLocation);

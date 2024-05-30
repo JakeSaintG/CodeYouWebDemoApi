@@ -19,7 +19,7 @@ export const JsonUtils = new JsonTable<ContactRequest>({
     defaultDataFileLocation: './files/contactDataDefault.json'
 });
 export const DbUtils = new ContactRequestsTable({
-    fileLocation: './files/contactData.db'
+    fileLocation: './files/contactRequests.db'
 });
 
 const ensureDataFilesExist = () => {

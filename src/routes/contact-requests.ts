@@ -13,12 +13,7 @@ router.get('/', async (req: Request, res: Response) => {
     try {
         const contactRequests = await contactRepository.returnAllContactRequests();
 
-        res.status(200).json({
-            status: 200,
-            statusText: 'OK',
-            message: `Successfully retrieved ${contactRequests.length} contact requests`,
-            data: ,
-        });
+        res.status(200).json(contactRequests);
     } catch (error: unknown) {
         // First log the error details to the console, for the developer (you!) to better understand
         // any issues
