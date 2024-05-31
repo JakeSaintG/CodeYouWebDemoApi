@@ -26,6 +26,8 @@ A `build` directory will appear. This is the compiled code that will run in Node
 
 **Safely closing the API is necessary to ensure that the port it was running on is freed up. The safest way to do this is to click into the terminal and enter `ctrl` + `c` on both Windows and Mac.**
 
+## Documentation
+TODO : When viewing, probably easier to recommend just opening the index.html directly to avoid liveserver restarting everytime the files change (.db and .json)
 
 ## Use
 ### Port
