@@ -1,8 +1,7 @@
 {
-  "name": "expressdemo",
-  "version": "2.1.0",
-  "description": "",
-  "main": "index.ts",
+  "name": "code-you-demo-api",
+  "version": "2.1.1",
+  "description": "Provides a demo API for ContactRequests, allowing you to create a web app with this API!",
   "scripts": {
     "test": "npx tsc && jest './build/tests'",
     "build": "npx tsc",
