@@ -28,7 +28,7 @@ process.on('uncaughtException', (error) => {
     if (error.message.includes('EADDRINUSE')) {
         console.error(
             `Port ${Env.PORT} is already in use. \r\n` +
-                `Either alter the port in the .env or follow instructions in README to terminate the process using port ${port}.`
+                `Either alter the port in the .env or follow instructions in README to terminate the process using port ${Env.PORT}.`
         );
     }
 });

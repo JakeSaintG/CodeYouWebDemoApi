@@ -1,6 +1,6 @@
-import { ContactRequestsCollection } from '../src/collections/contact-requests';
+import { ContactRequestsCollection } from '../../src/collections/contact-requests';
 import fs from 'fs';
-import * as DbUtils from '../src/data/contact-requests';
+import * as DbUtils from '../../src/data/contact-requests';
 
 /*
     The following lines is one of many ways to overwrite functions.
@@ -8,7 +8,7 @@ import * as DbUtils from '../src/data/contact-requests';
 */
 jest.mock('fs');
 const mockFS: jest.Mocked<typeof fs> = <jest.Mocked<typeof fs>>fs;
-jest.mock('../src/data/contact-requests');
+jest.mock('../../src/data/contact-requests');
 const mockDbUtils: jest.Mocked<typeof DbUtils> = <jest.Mocked<typeof DbUtils>>DbUtils;
 /*
     The AAA patten is commonly used in unit tests.

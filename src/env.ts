@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 // Get the configurable port from the .env file
 dotenv.config();
 
-const PORT: number = process.env.PORT || 8000;
+const PORT: number = Number(process.env.PORT) || 8000;
 
 // Do init validate here, so that you can see any errors as soon as the process starts
 // If the value is not provided, then assume 'database' by default
