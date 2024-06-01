@@ -32,10 +32,10 @@ A `build` directory will appear. This is the compiled code that will run in Node
 The default local port for the API to run on is 8000 (`localhost:8000`). If you attempt to run the API and get an error stating that the port is already in use, you may need to change the port listed in the .env file. If you feel that this port should not be taken and an old instance of the API is running still, check the Troubleshooting section below.
 
 ### Sending and Retrieving Contact Data
-- GET: `localhost:8000/contact`
-  - Make a GET request to /contact to see all data that is stored in the API.
-- POST: `localhost:8000/contact`
-  - Make a POST request to /contact to add a contact request to the stored data. This will require a BODY to the POST request that is in the below format:
+- GET: `localhost:8000/contact-requests`
+  - Make a GET request to /contact-requests to see all data that is stored in the API.
+- POST: `localhost:8000/contact-requests`
+  - Make a POST request to /contact-requests to add a contact request to the stored data. This will require a BODY to the POST request that is in the below format:
   ```json
     {
       "name": "string",
@@ -57,10 +57,10 @@ The default local port for the API to run on is 8000 (`localhost:8000`). If you 
 ### Resetting and Clearing Default Data
 This API comes with default data. As data is sent to API as part of frontend development, it may be necessary to clear out data that has been sent to it. The below endpoints **do not require a body to be supplied** and be used to reset the data to default or totally delete all data.
 
-- DELETE: `localhost:8000/clearAll`
+- DELETE: `localhost:8000/contact-requests/clearAll`
   - Make a DELETE request to /clearAll to erase all stored data.
-- POST: `localhost:8000/reset`
-  - Make a POST request to /reset to restore data to the default entries.
+- POST: `localhost:8000/contact-requests/reset`
+  - Make a POST request to /contact-requests/reset to restore data to the default entries.
 
 The API comes with a few helpful endpoints
 

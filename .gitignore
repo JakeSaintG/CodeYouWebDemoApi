@@ -3,4 +3,6 @@ build
 .DS_Store
 
 contacts.db
-src/files/contactData.json
+files/contactData.json
+files/contactRequests.db
+.idea
