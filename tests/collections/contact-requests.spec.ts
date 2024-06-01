@@ -1,8 +1,6 @@
-import { ContactRepository } from '../src/repositories/contactRepository';
+import { ContactRequestsCollection } from '../../src/collections/contact-requests';
 import fs from 'fs';
-import { DbUtils } from '../utils/dbutils';
-import { IResponse } from '../src/interfaces/IResponse';
-import { IContactRequest } from '../src/interfaces/IContactRequest';
+import * as DbUtils from '../../src/data/contact-requests';
 
 /*
     The following lines is one of many ways to overwrite functions.
@@ -10,7 +8,7 @@ import { IContactRequest } from '../src/interfaces/IContactRequest';
 */
 jest.mock('fs');
 const mockFS: jest.Mocked<typeof fs> = <jest.Mocked<typeof fs>>fs;
-jest.mock('../utils/dbutils')
+jest.mock('../../src/data/contact-requests');
 const mockDbUtils: jest.Mocked<typeof DbUtils> = <jest.Mocked<typeof DbUtils>>DbUtils;
 /*
     The AAA patten is commonly used in unit tests.
@@ -20,20 +18,18 @@ const mockDbUtils: jest.Mocked<typeof DbUtils> = <jest.Mocked<typeof DbUtils>>Db
 */
 it('should return an error if template file not present when resetting data', () => {
     //Arrange
-    const dbUtils = new DbUtils(); // Reminder that dbUtils is mocked on line 12 so this instance doesn't do anything.
-    const contactRepository = new ContactRepository(dbUtils);
+    const contactRepository = new ContactRequestsCollection();
     mockFS.existsSync.mockReturnValue(false);
-    const expectedCode = 500;
-    const expectedMessage = 'Proper files not in place. POST to the reset endpoint, restart server, or replace files to proceed.';
 
     //Act
-    const SystemUnderTest = contactRepository.ensureDataFilesExist() as IResponse;
+    const act = () => {
+        contactRepository.resetContactData();
+    };
+
 
     //Assert
-    const actualCode = SystemUnderTest.code;
-    const actualMessage = SystemUnderTest.message;
-    expect(actualCode).toEqual(expectedCode);
-    expect(actualMessage).toEqual(expectedMessage);
+    expect(act).toThrow(Error);
+    expect(act).toThrow('Template JSON file not found - please replace this file and restart the server. Ask a mentor for the file if you do not have a copy.');
 });
 
 /*
@@ -47,12 +43,11 @@ it('should return an error if template file not present when resetting data', ()
 */
 it('should call the private methods involved in resetting files when main reset method is called', async () => {
     //Arrange
-    const dbUtils = new DbUtils();
-    const contactRepository = new ContactRepository(dbUtils);
+    const contactRepository = new ContactRequestsCollection();
     mockFS.existsSync.mockReturnValue(true);
     mockFS.readFileSync.mockReturnValue('[{"foo":"bar"}]');
-    const resetDbSpy = jest.spyOn( contactRepository as any, 'resetDbFromTemplate').mockImplementation( () => {} );
-    const resetJsonFileSpy = jest.spyOn( contactRepository as any, 'resetJsonFromTemplate').mockImplementation( () => {} );
+    const resetDbSpy = jest.spyOn( contactRepository as any, 'resetDb').mockImplementation( () => {} );
+    const resetJsonFileSpy = jest.spyOn( contactRepository as any, 'resetJson').mockImplementation( () => {} );
 
     //Act
     contactRepository.resetContactData();
