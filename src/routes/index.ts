@@ -21,10 +21,15 @@ router.use('/contact-requests', ContactRoutes);
     Either way - we can send the stack trace if it exists on the error, and use message as a backup.
 
     If all else fails - we send a generic error response.
+
+    Note - In real apps, you may want to avoid passing the stacktrace (this could reveal private
+    logic about how your code works to anyone with access to the client), but for instructional
+    purposes this is ideal and lets you debug more easily!
  */
 router.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
     console.error(error);
 
+    // If the error is an instance of our internal HTTPError, then use the `code` property from it
     if (error instanceof HTTPError) {
         res.status(error.code).contentType('text/plain').send(error.stack || error.message);
         next();
