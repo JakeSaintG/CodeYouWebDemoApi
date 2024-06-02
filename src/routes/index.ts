@@ -13,7 +13,7 @@ router.get('/', (req: Request, res: Response) => {
 
 // If a GET request is made to the /ping route, return 'healthy'.
 router.get('/ping', (req: Request, res: Response) => {
-    res.send('Healthy');
+    res.send();
 });
 
 router.use('/contact-requests', ContactRoutes);

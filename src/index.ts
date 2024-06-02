@@ -13,6 +13,8 @@ app.use(cors());
 
 app.use('/', Routes);
 
+app.use('/documentation', express.static('docs'));
+
 const server = app.listen(Env.PORT, () => {
     console.log(
         `[server]: Server is running at http://localhost:${Env.PORT}. You are now able to make calls to it.`
