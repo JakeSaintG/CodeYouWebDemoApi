@@ -27,7 +27,7 @@ A `build` directory will appear. This is the compiled code that will run in Node
 **Safely closing the API is necessary to ensure that the port it was running on is freed up. The safest way to do this is to click into the terminal and enter `ctrl` + `c` on both Windows and Mac.**
 
 ## Documentation
-TODO : When viewing, probably easier to recommend just opening the index.html directly to avoid liveserver restarting everytime the files change (.db and .json)
+To view the docs, ensure that the server is running and navigate to `http://localhost:8000/documentation/` in your browser of choice.
 
 ## Use
 ### Port
@@ -59,12 +59,10 @@ The default local port for the API to run on is 8000 (`localhost:8000`). If you 
 ### Resetting and Clearing Default Data
 This API comes with default data. As data is sent to API as part of frontend development, it may be necessary to clear out data that has been sent to it. The below endpoints **do not require a body to be supplied** and be used to reset the data to default or totally delete all data.
 
-- DELETE: `localhost:8000/contact-requests/clearAll`
+- DELETE: `localhost:8000/contact-requests`
   - Make a DELETE request to /clearAll to erase all stored data.
-- POST: `localhost:8000/contact-requests/reset`
-  - Make a POST request to /contact-requests/reset to restore data to the default entries.
-
-The API comes with a few helpful endpoints
+- DELETE: `localhost:8000/contact-requests?reset=true`
+  - Make a DELETE request to /contact-requests with the `reset=true` query parameter to restore data to the default entries.
 
 ## Troubleshooting:
 It's possible that the port you supply in the .env file is already in use. It's also possible to shut down the API without allowing it to close the port that it is running on. If this is the case, manual intervention is needed. For the easiest path, resetting your machine will likely free up that port. However, there are also easy ways to release the port without restarting your computer. See below for Windows and Mac instructions for doing so. **The below examples assume that the port is set to 8000.**
