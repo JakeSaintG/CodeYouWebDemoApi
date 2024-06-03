@@ -7,14 +7,13 @@ const contactRequestData = document.getElementById('contact_request_data');
 
 const toggleMobileMenu = () => {
     const menuState = document.querySelector('nav');
-    
+
     if (menuState.style.display !== 'flex') {
         menuState.style.display = 'flex';
     } else {
         menuState.style.display = 'none';
     }
-}
-
+};
 
 const checkPing = () => {
     const check = setInterval(() => {
@@ -52,15 +51,13 @@ const showServerHealth = (serverOnline, additionalData) => {
         // Removing an element class that may not exist is "safe". No need to check element.classList before removing.
         serverStatus.parentElement.classList.remove('server_unhealthy', 'server_warning');
         serverStatus.parentElement.classList.add('server_healthy');
-    } 
-    else if (!serverPreviouslyHealthy && serverOnline === 'warning') {
+    } else if (!serverPreviouslyHealthy && serverOnline === 'warning') {
         console.log('warning');
         serverPreviouslyHealthy = false;
         serverStatus.parentElement.classList.remove('server_healthy', 'server_unhealthy');
         serverStatus.parentElement.classList.add('server_warning');
         serverStatus.innerText = `Server status: Possible error with status code ${additionalData}`;
-    }
-    else if (serverOnline === 'error') {
+    } else if (serverOnline === 'error') {
         serverPreviouslyHealthy = false;
         serverStatus.innerText = `Error: ${additionalData}`;
         serverStatus.parentElement.classList.remove('server_healthy', 'server_warning');
@@ -112,7 +109,7 @@ const refreshTableData = () => {
 const generateHtmlTable = (jsonData) => {
     if (jsonData.length === 0) {
         const emptyData = document.createElement('p');
-        emptyData.innerText = 'No data to display!'
+        emptyData.innerText = 'No data to display!';
         return emptyData;
     }
 
@@ -150,17 +147,23 @@ const camelCaseToWords = (camelCase) => {
 // Injected; Nesting code and pre tags can make the HTML look nasty.
 (() => {
     const postRequestExample = {
-        "name": "string",
-        "email": "string",
-        "piecesOfInterest": [
-            "string"
-        ],
-        "message": "string"
-    }
-    
+        name: 'string',
+        email: 'string',
+        piecesOfInterest: ['string'],
+        message: 'string'
+    };
+
     const postResetJson = document.createElement('code');
-    postResetJson.innerText = JSON.stringify(postRequestExample, null, 4)
+    postResetJson.innerText = JSON.stringify(postRequestExample, null, 4);
     document.getElementById('post_request').appendChild(postResetJson);
-})()
+})();
+
+addEventListener('resize', () => {
+    if (window.innerWidth > 769) {
+        document.querySelector('nav').style.display = 'flex';
+    } else {
+        document.querySelector('nav').style.display = 'none';
+    }
+});
 
 checkPing();
