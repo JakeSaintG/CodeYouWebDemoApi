@@ -6,7 +6,7 @@
     "test": "npx tsc && jest './build/tests'",
     "build": "npx tsc",
     "start": "node build/src/index.js",
-    "dev": "nodemon src/index.ts --ignore files"
+    "dev": "nodemon src/index.ts --ignore files --ignore docs"
   },
   "keywords": [],
   "author": "",

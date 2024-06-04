@@ -47,7 +47,7 @@
             <h2>Post New Contact Request</h2>
             <span class="endpoint">
                 <div class="post_request">POST</div>
-                <div class="request_url">localhost:8000/contact-requests</div>
+                <div class="request_url">localhost:<span class="port">8000</span>/contact-requests</div>
             </span>
             <p>
                 Make a POST request to /contact-requests to add a contact request to the stored
@@ -72,7 +72,7 @@
             <h2>Get All Contact Requests</h2>
             <span class="endpoint">
                 <div class="get_request">GET</div>
-                <div class="request_url">localhost:8000/contact-requests</div>
+                <div class="request_url">localhost:<span class="port">8000</span>/contact-requests</div>
             </span>
             <p>
                 Make a GET request to /contact-requests to see all data that is stored in the API.
@@ -83,7 +83,7 @@
             <h2>Delete All Contact Requests</h2>
             <span class="endpoint">
                 <div class="delete_request">DELETE</div>
-                <div class="request_url">localhost:8000/contact-requests</div>
+                <div class="request_url">localhost:<span class="port">8000</span>/contact-requests</div>
             </span>
             <p>Make a DELETE request to /clearAll to erase all stored data.</p>
         </section>
@@ -92,12 +92,14 @@
             <h2>Restore to Default Contact Request</h2>
             <span class="endpoint">
                 <div class="delete_request">DELETE</div>
-                <div class="request_url">localhost:8000/contact-requests?reset=true</div>
+                <div class="request_url">localhost:<span class="port">8000</span>/contact-requests?reset=true</div>
             </span>
 
             <p>
-                Make a DELETE request to /contact-requests with the `reset=true` query parameter to
-                restore data to the default entries.
+                Make a DELETE request to /contact-requests with the `reset=true` query request parameter to restore data to the default entries. This will clear existing data and bring back the Ninja Turtle data.
+            </p>
+            <p>
+                For more information on request parameters, check out <a href="https://apidog.com/articles/http-request-parameters-guide/">this article from apidog</a> or <a href="https://en.wikipedia.org/wiki/Query_string">this helpful Wikipedia page.</a>
             </p>
         </section>
 
