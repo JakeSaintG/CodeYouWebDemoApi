@@ -19,7 +19,8 @@ app.use('/documentation', express.static('docs'));
 
 const server = app.listen(Env.PORT, () => {
     console.log(
-        `[server]: Server is running at http://localhost:${Env.PORT}. You are now able to make calls to it.`
+        `[server]: Server is running at http://localhost:${Env.PORT} and you are now able to make calls to it.\r\n`+
+        `For use and documentation, visit http://localhost:${Env.PORT}/documentation`
     );
 });
 
