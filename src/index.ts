@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import cors from 'cors';
 // Allow async handlers to cleanly throw errors to the global error handler.
 import 'express-async-errors';
+import fs from 'fs';
 import { Env } from './env';
 import Routes from './routes';
 
@@ -14,6 +15,8 @@ app.use(cors());
 app.use('/', Routes);
 
 app.use('/documentation', express.static('docs'));
+
+fs.writeFileSync('./docs/port.json', JSON.stringify({port: Env.PORT}, null, 2)); 
 
 const server = app.listen(Env.PORT, () => {
     console.log(

@@ -18,7 +18,6 @@ const toggleMobileMenu = () => {
 const checkPing = () => {
     const check = setInterval(() => {
         pingServer();
-        console.log(port)
 
         if (pingInterval === 0) {
             pingInterval = 3000;
@@ -89,12 +88,11 @@ const showData = (show) => {
     contactRequestData.innerHTML = '';
 };
 
-const getData = () => 
+const getData = () =>
     fetch(`http://localhost:${port}/contact-requests`)
         .then(async (r) => await r.json())
         .then((json) => {
             const htmlTable = generateHtmlTable(json);
-            console.log(htmlTable);
             contactRequestData.appendChild(htmlTable);
         });
 
@@ -114,15 +112,19 @@ const generateHtmlTable = (jsonData) => {
     const headerRow = document.createElement('tr');
 
     Object.keys(jsonData[0]).forEach((key) => {
-        const columnHead = document.createElement('th');
-        columnHead.textContent = camelCaseToWords(key);
-        headerRow.appendChild(columnHead);
+        if (key !== 'id') {
+            const columnHead = document.createElement('th');
+            columnHead.textContent = camelCaseToWords(key);
+            headerRow.appendChild(columnHead);
+        }
     });
 
     table.appendChild(headerRow);
 
     jsonData.forEach((rowData) => {
         const tableRow = document.createElement('tr');
+        tableRow.id = rowData.id;
+        delete rowData.id;
 
         Object.values(rowData).forEach((value) => {
             const tableCell = document.createElement('td');
@@ -160,8 +162,18 @@ const camelCaseToWords = (camelCase) => {
         .then(async (r) => await r.json())
         .then((json) => {
             port = json.port || 8000;
-            document.querySelectorAll('.port').forEach(e => e.innerText = port);
+            document.querySelectorAll('.port').forEach((e) => (e.innerText = port));
         })
-        .then(checkPing())
-        .catch((error) => console.error(`Unable to retrieve configurable PORT from port.json: ${error}`));
+        .then(() => checkPing())
+        .catch((error) =>
+            console.error(`Unable to retrieve configurable PORT from port.json: ${error}`)
+        );
 })();
+
+addEventListener('resize', () => {
+    if (window.innerWidth > 769) {
+        document.querySelector('nav').style.display = 'flex';
+    } else {
+        document.querySelector('nav').style.display = 'none';
+    }
+});
