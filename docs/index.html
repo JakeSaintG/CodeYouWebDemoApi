@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="docs-style.css" />
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <title>Docs</title>
+    </head>
+    <body>
+        <header>
+            <h1>Contact Request API Documentation</h1>
+            <nav>
+                <a href="https://code-you.org/">Code:You</a>
+                <a href="https://github.com/JakeSaintG/CodeYouWebDemoApi">GitHub</a>
+                <a href="https://restful-api.dev/rest-fundamentals/">Rest Fundamentals</a>
+            </nav>
+            <p class="mobile_toggle" onclick="toggleMobileMenu()">&#9776;</p>
+        </header>
+        <div class="server_details server_warning">
+            <span id="server_status">Checking server status...</span>
+            <div>
+                <button onclick="clearData()">Clear Data</button>
+                <button onclick="resetData()">Reset Data To Default</button>
+                <button onclick="showData(true)">View Data</button>
+            </div>
+        </div>
+
+        <section>
+            <h2>Context</h2>
+            <h3>What is the goal of this API?</h3>
+            <p>
+                You have been tasked with developing a web page for an artist that would like
+                interested parties to contact them about various art pieces. They had a backend
+                developer set up this Contact Request API for them and have supplied this GitHub
+                repository for you to work with. You have complete creative freedom for styling this
+                contact request form! Best of luck!
+            </p>
+            <h3>What is a Contact Request?</h3>
+            <p>
+                For context, this API deals with "Contact Requests" or requests for someone to reach
+                out to a user.
+            </p>
+        </section>
+
+        <section>
+            <h2>Post New Contact Request</h2>
+            <span class="endpoint">
+                <div class="post_request">POST</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests
+                </div>
+            </span>
+            <p>
+                Make a POST request to /contact-requests to add a contact request to the stored
+                data. This will require a BODY to the POST request that is in the below format:
+            </p>
+
+            <!-- Example JSON injected by script -->
+            <pre id="post_request"></pre>
+
+            <p style="font-weight: bold;">Additional notes!</p>
+            <ul>
+                <li>The "string" placeholders above can be replaced with names, emails, etc.</li>
+                <li>The piecesOfInterest array should only contain strings.</li>
+                <ul>
+                    <li>
+                        The above fields are required and will be converted to strings if strings
+                        are not sent in.
+                    </li>
+                </ul>
+                <li>Additional fields (ex: phone number) will be removed and not stored.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Get All Contact Requests</h2>
+            <span class="endpoint">
+                <div class="get_request">GET</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests
+                </div>
+            </span>
+            <p>
+                Make a GET request to /contact-requests to see all data that is stored in the API.
+            </p>
+        </section>
+
+        <section>
+            <h2>Delete All Contact Requests</h2>
+            <span class="endpoint">
+                <div class="delete_request">DELETE</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests
+                </div>
+            </span>
+            <p>
+                Make a DELETE request to /contact-requests with no additional parameters to erase
+                all stored data.
+            </p>
+        </section>
+
+        <section>
+            <h2>Restore to Default Contact Request</h2>
+            <span class="endpoint">
+                <div class="delete_request">DELETE</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests?reset=true
+                </div>
+            </span>
+
+            <p>
+                Make a DELETE request to /contact-requests with the `reset=true` query request
+                parameter to restore data to the default entries. This will clear existing data and
+                bring back the Ninja Turtle data.
+            </p>
+            <p>
+                For more information on request parameters, check out
+                <a href="https://apidog.com/articles/http-request-parameters-guide/">
+                    this article from apidog
+                </a>
+                or
+                <a href="https://en.wikipedia.org/wiki/Query_string">
+                    this helpful Wikipedia page.
+                </a>
+            </p>
+        </section>
+
+        <dialog>
+            <h2>Contact Request Data</h2>
+            <div id="contact_request_data"></div>
+            <button autofocus onclick="showData(false)">Close</button>
+            <button autofocus onclick="refreshTableData()">Refresh</button>
+        </dialog>
+        <script src="docs-app.js"></script>
+    </body>
+</html>

@@ -14,10 +14,12 @@ export const setDbContext = () => {
     dbContext = new sqlite(FILE_LOCATION);
 };
 
-export const init = ({ defaultData }: { defaultData: ContactRequest[] }) => {
-    setDbContext();
+export const init = ({ defaultData }: { defaultData: ContactRequest[] }) => {    
     if (!fs.existsSync(FILE_LOCATION)) {
+        setDbContext();
         createAndPopulateContactsTable(defaultData);
+    } else {
+        setDbContext();
     }
 }
 
