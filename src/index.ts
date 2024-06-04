@@ -14,9 +14,8 @@ app.use(cors());
 
 app.use('/', Routes);
 
-app.use('/documentation', express.static('docs'));
-
 fs.writeFileSync('./docs/port.json', JSON.stringify({port: Env.PORT}, null, 2)); 
+app.use('/documentation', express.static('docs'));
 
 const server = app.listen(Env.PORT, () => {
     console.log(

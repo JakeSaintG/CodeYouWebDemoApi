@@ -6,3 +6,4 @@ contacts.db
 files/contactData.json
 files/contactRequests.db
 .idea
+docs/port.json
