@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="docs-style.css" />
+        <link rel="stylesheet" href="style.css" />
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
         <title>Docs</title>
     </head>
@@ -19,10 +19,18 @@
         </header>
         <div class="server_details server_warning">
             <span id="server_status">Checking server status...</span>
-            <div>
+            <div class="large_screen_menu">
                 <button onclick="clearData()">Clear Data</button>
                 <button onclick="resetData()">Reset Data To Default</button>
                 <button onclick="showData(true)">View Data</button>
+            </div>
+
+            <div class="small_screen_menu">
+                <button onclick="clearData()" class="icon_btn" style="background-color: rgb(247, 78, 78);">
+                    <img style="height: 1rem;" src="./img/square-minus-regular.svg" aria-hidden="true">
+                </button>
+                <button onclick="resetData()">Reset</button>
+                <button onclick="showData(true)">View</button>
             </div>
         </div>
 
@@ -129,9 +137,13 @@
         <dialog>
             <h2>Contact Request Data</h2>
             <div id="contact_request_data"></div>
-            <button autofocus onclick="showData(false)">Close</button>
-            <button autofocus onclick="refreshTableData()">Refresh</button>
+            <button autofocus onclick="showData(false)" class="icon_btn" style="background-color: rgb(247, 78, 78);">
+                <img style="height: 1rem;" src="./img/x-solid.svg" aria-hidden="true">
+            </button>
+            <button autofocus onclick="refreshTableData()" class="icon_btn" style="background-color: rgb(78, 205, 247);">
+                <img style="height: 1rem;" src="./img/arrows-rotate-solid.svg" aria-hidden="true">
+            </button>
         </dialog>
-        <script src="docs-app.js"></script>
+        <script src="app.js"></script>
     </body>
 </html>
