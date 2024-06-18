@@ -30,7 +30,7 @@ router.delete('/', (req: Request, res: Response) => {
     if (req.query.reset) {
         contactRepository.resetContactData();
         res.status(200).send('Data for contacts successfully reset.');
-    } if (req.query.id) {
+    } else if (req.query.id) {
         contactRepository.deleteContactRequestById(req.query.id as string);
         res.status(200).send(`Contact request with id ${req.query.id} successfully deleted.`);
     } else {
