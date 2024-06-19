@@ -44,6 +44,8 @@ router.use((error: unknown, req: Request, res: Response, next: NextFunction) => 
     }
 
     if (error instanceof Error) {
+        
+        
         res.status(500)
             .contentType('text/plain')
             .send(error.stack || error.message);
