@@ -14,7 +14,10 @@ app.use(cors());
 
 app.use('/', Routes);
 
-fs.writeFileSync('./docs/port.json', JSON.stringify({port: Env.PORT}, null, 2)); 
+// Create/write the port to a JSON file that the Docs frontend can use.
+fs.writeFileSync('./docs/port.json', JSON.stringify({port: Env.PORT}, null, 2));
+
+// Serve all files in the docs folder via /documentation endpoint.
 app.use('/documentation', express.static('docs'));
 
 const server = app.listen(Env.PORT, () => {
