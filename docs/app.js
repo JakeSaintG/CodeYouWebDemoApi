@@ -45,7 +45,6 @@ const pingServer = () =>
 const showServerHealth = (serverOnline, additionalData) => {
     if (!serverPreviouslyHealthy && serverOnline === 'healthy') {
         serverPreviouslyHealthy = true;
-        serverStatus.innerText = `Server status: Healthy`;
 
         // Removing an element class that may not exist is "safe". No need to check element.classList before removing.
         serverStatus.parentElement.classList.remove('server_unhealthy', 'server_warning');
@@ -64,10 +63,19 @@ const showServerHealth = (serverOnline, additionalData) => {
     }
 };
 
+const deleteDataById = (id) => 
+    fetch(`http://localhost:${port}/contact-requests?id=${id}`, { method: 'DELETE' })
+        .then((r) => r.status)
+        .then((status) => {
+            refreshTableData();
+            console.log(status);
+        });
+
 const clearData = () =>
     fetch(`http://localhost:${port}/contact-requests`, { method: 'DELETE' })
         .then((r) => r.status)
         .then((status) => {
+            refreshTableData();
             console.log(status);
         });
 
@@ -75,6 +83,7 @@ const resetData = () =>
     fetch(`http://localhost:${port}/contact-requests?reset=true`, { method: 'DELETE' })
         .then((r) => r.status)
         .then((status) => {
+            refreshTableData();
             console.log(status);
         });
 
@@ -92,7 +101,7 @@ const getData = () =>
     fetch(`http://localhost:${port}/contact-requests`)
         .then(async (r) => await r.json())
         .then((json) => {
-            const htmlTable = generateHtmlTable(json);
+            const htmlTable = generateDataPreviewTable(json);
             contactRequestData.appendChild(htmlTable);
         });
 
@@ -101,7 +110,7 @@ const refreshTableData = () => {
     getData();
 };
 
-const generateHtmlTable = (jsonData) => {
+const generateDataPreviewTable = (jsonData) => {
     if (jsonData.length === 0) {
         const emptyData = document.createElement('p');
         emptyData.innerText = 'No data to display!';
@@ -119,9 +128,15 @@ const generateHtmlTable = (jsonData) => {
         }
     });
 
+    const deleteColumnHead = document.createElement('th');
+    deleteColumnHead.textContent = 'Delete';
+    headerRow.appendChild(deleteColumnHead);
+
     table.appendChild(headerRow);
 
     jsonData.forEach((rowData) => {
+
+        //Add unique ID to table row element and remove it from Obj;
         const tableRow = document.createElement('tr');
         tableRow.id = rowData.id;
         delete rowData.id;
@@ -132,11 +147,33 @@ const generateHtmlTable = (jsonData) => {
             tableRow.appendChild(tableCell);
         });
 
+        const deleteTableCell = document.createElement('td');
+        deleteTableCell.appendChild(createDataPreviewDeleteButton(tableRow.id));
+        tableRow.appendChild(deleteTableCell);
+
         table.appendChild(tableRow);
     });
 
     return table;
 };
+
+const createDataPreviewDeleteButton = (idToDelete) => {
+    const button = document.createElement('button');
+    button.className = 'icon_btn';
+    button.style = 'background-color: rgb(247, 78, 78)';
+    
+    const buttonImage = document.createElement('img');
+    buttonImage.style = 'height: 1rem';
+    buttonImage.src = './img/trash-solid.svg';
+
+    button.appendChild(buttonImage);
+
+    button.onclick = () => {
+        deleteDataById(idToDelete);
+    };
+
+    return button;
+}
 
 const camelCaseToWords = (camelCase) => {
     const wordsSplit = camelCase.replace(/([A-Z])/g, ' $1');
@@ -177,3 +214,21 @@ addEventListener('resize', () => {
         document.querySelector('nav').style.display = 'none';
     }
 });
+
+dialog.addEventListener('click', (event) => {
+    /*
+        This closes the dialog if the area outside of it is clicked.
+
+        When a dialog is open, its margin takes up the rest of the screen, so clicking outside 
+        of it is still considered clicking the dialog element.
+        The visible dialog has a nested div that takes up the whole dialog content so clicking there 
+        is not considered the dialog element itself.
+    */
+    if (event.target.nodeName === 'DIALOG') {
+        showData(false);
+        console.log('closing.......')
+    } else {
+        event.stopPropagation();
+    }
+});
+

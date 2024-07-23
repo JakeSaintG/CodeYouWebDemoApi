@@ -14,28 +14,12 @@
                 <a href="https://code-you.org/">Code:You</a>
                 <a href="https://github.com/JakeSaintG/CodeYouWebDemoApi">GitHub</a>
                 <a href="https://restful-api.dev/rest-fundamentals/">Rest Fundamentals</a>
+                <a href="#" onclick="showData(true)">Server Controls</a>
             </nav>
             <p class="mobile_toggle" onclick="toggleMobileMenu()">&#9776;</p>
         </header>
         <div class="server_details server_warning">
             <span id="server_status">Checking server status...</span>
-            <div class="large_screen_menu">
-                <button onclick="clearData()">Clear Data</button>
-                <button onclick="resetData()">Reset Data To Default</button>
-                <button onclick="showData(true)">View Data</button>
-            </div>
-
-            <div class="small_screen_menu">
-                <button onclick="clearData()" class="icon_btn" style="background-color: rgb(247, 78, 78);">
-                    <img style="height: 1rem;" src="./img/square-minus-regular.svg" aria-hidden="true">
-                </button>
-                <button onclick="resetData()">
-                    Reset
-                </button>
-                <button onclick="showData(true)" class="icon_btn" style="background-color: rgb(78, 185, 247);">
-                    <img style="height: 1rem;" src="./img/eye-regular.svg" aria-hidden="true">
-                </button>
-            </div>
         </div>
 
         <section>
@@ -139,14 +123,37 @@
         </section>
 
         <dialog>
-            <h2>Contact Request Data</h2>
-            <div id="contact_request_data"></div>
-            <button autofocus onclick="showData(false)" class="icon_btn" style="background-color: rgb(247, 78, 78);">
-                <img style="height: 1rem;" src="./img/x-solid.svg" aria-hidden="true">
-            </button>
-            <button autofocus onclick="refreshTableData()" class="icon_btn" style="background-color: rgb(78, 205, 247);">
-                <img style="height: 1rem;" src="./img/arrows-rotate-solid.svg" aria-hidden="true">
-            </button>
+            <div id="dialog_contents">
+                <div class="dialog_banner">
+                    <h2>Contact Request Data</h2>
+                    <div class="menu" style="display: flex;">
+                        <button autofocus onclick="showData(false)" class="icon_btn" style="background-color: rgb(247, 78, 78);" title="Back" aria-label="back button">
+                            <img style="height: 1rem;" src="./img/x-solid.svg" aria-hidden="true">
+                        </button>
+                    </div>
+                </div>
+                <div id="contact_request_data"></div>
+                <div class="menu">
+                    <button onclick="clearData()" class="icon_btn" style="background-color: rgb(247, 78, 78);" aria-label="destructive, clear data">
+                        <img style="height: 1rem;" src="./img/ban-solid.svg" aria-hidden="true">
+                        <span class="btn_text">
+                            Clear Data
+                        </span>
+                    </button>
+                    <button onclick="resetData()" class="icon_btn" style="background-color: rgb(78, 185, 247);" aria-label="Reset data to default">
+                        <img style="height: 1rem;" src="./img/arrows-rotate-solid.svg" aria-hidden="true">
+                        <span class="btn_text">
+                            Reset Data
+                        </span>
+                    </button>
+                    <button onclick="refreshTableData()" class="icon_btn" style="background-color: rgb(78, 185, 247);" aria-label="refresh table contents">
+                        <img style="height: 1rem;" src="./img/arrow-rotate-left-solid.svg" aria-hidden="true">
+                        <span class="btn_text">
+                            Refresh Table
+                        </span>
+                    </button>
+                </div>
+            </div>
         </dialog>
         <script src="app.js"></script>
     </body>
