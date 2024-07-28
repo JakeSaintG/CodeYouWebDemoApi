@@ -39,6 +39,22 @@ nav a {
     padding: 1rem;
 }
 
+/* 
+    Hides an icon and allows for additional descriptive text used by screen readers.
+    https://tailwindcss.com/docs/screen-readers
+*/
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 nav a:hover,
 nav a:active {
     background-color: #106396;
@@ -160,10 +176,8 @@ pre {
 
 #contact_request_data {
     margin-bottom: 1rem;
-
     max-height: 66vh;
     overflow-y: scroll;
-    /* border: solid red 1px; */
 }
 
 table {
@@ -180,6 +194,10 @@ th {
 
 tr:nth-child(even) {
     background-color: #dddddd;
+}
+
+.centered-cell button {
+    margin: 0 auto;
 }
 
 button {

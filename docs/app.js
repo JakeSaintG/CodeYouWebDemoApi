@@ -68,7 +68,6 @@ const deleteDataById = (id) =>
         .then((r) => r.status)
         .then((status) => {
             refreshTableData();
-            console.log(status);
         });
 
 const clearData = () =>
@@ -76,7 +75,6 @@ const clearData = () =>
         .then((r) => r.status)
         .then((status) => {
             refreshTableData();
-            console.log(status);
         });
 
 const resetData = () =>
@@ -84,7 +82,6 @@ const resetData = () =>
         .then((r) => r.status)
         .then((status) => {
             refreshTableData();
-            console.log(status);
         });
 
 const showData = (show) => {
@@ -148,6 +145,7 @@ const generateDataPreviewTable = (jsonData) => {
         });
 
         const deleteTableCell = document.createElement('td');
+        deleteTableCell.classList.add('centered-cell');
         deleteTableCell.appendChild(createDataPreviewDeleteButton(tableRow.id));
         tableRow.appendChild(deleteTableCell);
 
@@ -159,12 +157,20 @@ const generateDataPreviewTable = (jsonData) => {
 
 const createDataPreviewDeleteButton = (idToDelete) => {
     const button = document.createElement('button');
-    button.className = 'icon_btn';
+    button.classList = 'icon_btn';
     button.style = 'background-color: rgb(247, 78, 78)';
     
+    const screenReaderOnly = document.getElementById('span');
+    screenReaderOnly.className = 'sr-only';
+    screenReaderOnly.textContent = 'Deletes contact request from database.';
+
     const buttonImage = document.createElement('img');
     buttonImage.style = 'height: 1rem';
+    buttonImage.alt = '';
     buttonImage.src = './img/trash-solid.svg';
+
+
+    // REMOVE sr-only FROM NAV LINKS AND REPLACE WITH aria-label; see jabo message
 
     button.appendChild(buttonImage);
 
