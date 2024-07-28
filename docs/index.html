@@ -11,10 +11,24 @@
         <header>
             <h1>Contact Request API Documentation</h1>
             <nav>
-                <a href="https://code-you.org/">Code:You</a>
-                <a href="https://github.com/JakeSaintG/CodeYouWebDemoApi">GitHub</a>
-                <a href="https://restful-api.dev/rest-fundamentals/">Rest Fundamentals</a>
-                <a href="#" onclick="showData(true)">Server Controls</a>
+                <a href="https://code-you.org/">
+                    Code:You&nbsp; 
+                    <span class="sr-only">Opens in a new tab.</span>
+                    <img style="height: 1rem; filter: invert();" src="./img/arrow-up-right-from-square-solid.svg" aria-hidden="true">
+                </a>
+                <a href="https://github.com/JakeSaintG/CodeYouWebDemoApi">
+                    GitHub&nbsp;
+                    <span class="sr-only">Opens in a new tab.</span>
+                    <img style="height: 1rem; filter: invert();" src="./img/arrow-up-right-from-square-solid.svg" aria-hidden="true">
+                </a>
+                <a href="https://restful-api.dev/rest-fundamentals/">
+                    Rest Fundamentals&nbsp;
+                    <span class="sr-only">Opens in a new tab.</span>
+                    <img style="height: 1rem; filter: invert();" src="./img/arrow-up-right-from-square-solid.svg" aria-hidden="true">
+                </a>
+                <a href="#" onclick="showData(true)">
+                    Server Controls
+                </a>
             </nav>
             <p class="mobile_toggle" onclick="toggleMobileMenu()">&#9776;</p>
         </header>
@@ -51,10 +65,8 @@
                 Make a POST request to /contact-requests to add a contact request to the stored
                 data. This will require a BODY to the POST request that is in the below format:
             </p>
-
             <!-- Example JSON injected by script -->
             <pre id="post_request"></pre>
-
             <p style="font-weight: bold;">Additional notes!</p>
             <ul>
                 <li>The "string" placeholders above can be replaced with names, emails, etc.</li>
@@ -83,6 +95,19 @@
         </section>
 
         <section>
+            <h2>Get Contact Request by Id</h2>
+            <span class="endpoint">
+                <div class="get_request">GET</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests?id={UNIQUE_ID}
+                </div>
+            </span>
+            <p>
+                Make a GET request to /contact-requests. Include an id as a query parameter to return just that entry. 
+            </p>
+        </section>
+
+        <section>
             <h2>Delete All Contact Requests</h2>
             <span class="endpoint">
                 <div class="delete_request">DELETE</div>
@@ -95,6 +120,19 @@
                 all stored data.
             </p>
         </section>
+        
+        <section>
+            <h2>Delete All Contact Request By Id</h2>
+            <span class="endpoint">
+                <div class="delete_request">DELETE</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests?id={UNIQUE_ID}
+                </div>
+            </span>
+            <p>
+                Make a DELETE request to /contact-requests. Include an id as a query parameter to remove just that entry from the data. 
+            </p>
+        </section>
 
         <section>
             <h2>Restore to Default Contact Request</h2>
@@ -104,7 +142,6 @@
                     localhost:<span class="port">8000</span>/contact-requests?reset=true
                 </div>
             </span>
-
             <p>
                 Make a DELETE request to /contact-requests with the `reset=true` query request
                 parameter to restore data to the default entries. This will clear existing data and
@@ -128,7 +165,7 @@
                     <h2>Contact Request Data</h2>
                     <div class="menu" style="display: flex;">
                         <button autofocus onclick="showData(false)" class="icon_btn" style="background-color: rgb(247, 78, 78);" title="Back" aria-label="back button">
-                            <img style="height: 1rem;" src="./img/x-solid.svg" aria-hidden="true">
+                            <img style="height: 1rem;" src="./img/x-solid.svg" aria-hidden="true" aria-label="Close" alt="Close dialog">
                         </button>
                     </div>
                 </div>
