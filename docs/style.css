@@ -40,7 +40,7 @@ nav a {
 }
 
 /* 
-    Hides an icon and allows for additional descriptive text used by screen readers.
+    Allows for additional descriptive text used by screen readers where aria may not be supported.
     https://tailwindcss.com/docs/screen-readers
 */
 .sr-only {
@@ -178,6 +178,20 @@ pre {
     margin-bottom: 1rem;
     max-height: 66vh;
     overflow-y: scroll;
+}
+
+#server_control_error {
+    display: none;
+    justify-content: space-between;
+    background-color: #f0b7b7;
+    border: solid red 1px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    gap: 4rem;
+}
+
+#server_control_error * {
+    margin: .5rem;
 }
 
 table {
