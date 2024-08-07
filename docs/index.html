@@ -3,27 +3,34 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="docs-style.css" />
+        <link rel="stylesheet" href="style.css" />
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
         <title>Docs</title>
     </head>
     <body>
         <header>
-            <h1>Contact Request API Documentation</h1>
+            <h1>Contact Request API Docs</h1>
             <nav>
-                <a href="https://code-you.org/">Code:You</a>
-                <a href="https://github.com/JakeSaintG/CodeYouWebDemoApi">GitHub</a>
-                <a href="https://restful-api.dev/rest-fundamentals/">Rest Fundamentals</a>
+                <a href="https://code-you.org/" target="_blank" aria-label="New tab; Link out to Code You offical site.">
+                    Code:You&nbsp; 
+                    <img style="height: 1rem; filter: invert();" src="./img/arrow-up-right-from-square-solid.svg" aria-hidden="true">
+                </a>
+                <a href="https://github.com/JakeSaintG/CodeYouWebDemoApi" target="_blank" aria-label="New tab; Link out to Github repo for this project.">
+                    GitHub&nbsp;
+                    <img style="height: 1rem; filter: invert();" src="./img/arrow-up-right-from-square-solid.svg" aria-hidden="true">
+                </a>
+                <a href="https://restful-api.dev/rest-fundamentals/" target="_blank" aria-label="New tab; Link out to resources on rest fundamentals.">
+                    Rest Fundamentals&nbsp;
+                    <img style="height: 1rem; filter: invert();" src="./img/arrow-up-right-from-square-solid.svg" aria-hidden="true">
+                </a>
+                <a href="#!" onclick="showServerControls(true)" aria-label="Open server controls modal.">
+                    Server Controls
+                </a>
             </nav>
             <p class="mobile_toggle" onclick="toggleMobileMenu()">&#9776;</p>
         </header>
         <div class="server_details server_warning">
             <span id="server_status">Checking server status...</span>
-            <div>
-                <button onclick="clearData()">Clear Data</button>
-                <button onclick="resetData()">Reset Data To Default</button>
-                <button onclick="showData(true)">View Data</button>
-            </div>
         </div>
 
         <section>
@@ -32,14 +39,14 @@
             <p>
                 You have been tasked with developing a web page for an artist that would like
                 interested parties to contact them about various art pieces. They had a backend
-                developer set up this Contact Request API for them and have supplied this GitHub
+                developer set up this Contact Request API and have supplied this GitHub
                 repository for you to work with. You have complete creative freedom for styling this
                 contact request form! Best of luck!
             </p>
             <h3>What is a Contact Request?</h3>
             <p>
                 For context, this API deals with "Contact Requests" or requests for someone to reach
-                out to a user.
+                out to a the site owner.
             </p>
         </section>
 
@@ -55,10 +62,8 @@
                 Make a POST request to /contact-requests to add a contact request to the stored
                 data. This will require a BODY to the POST request that is in the below format:
             </p>
-
             <!-- Example JSON injected by script -->
             <pre id="post_request"></pre>
-
             <p style="font-weight: bold;">Additional notes!</p>
             <ul>
                 <li>The "string" placeholders above can be replaced with names, emails, etc.</li>
@@ -87,6 +92,19 @@
         </section>
 
         <section>
+            <h2>Get Contact Request by Id</h2>
+            <span class="endpoint">
+                <div class="get_request">GET</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests?id={UNIQUE_ID}
+                </div>
+            </span>
+            <p>
+                Make a GET request to /contact-requests. Include an id as a query parameter to return just that entry. 
+            </p>
+        </section>
+
+        <section>
             <h2>Delete All Contact Requests</h2>
             <span class="endpoint">
                 <div class="delete_request">DELETE</div>
@@ -99,6 +117,19 @@
                 all stored data.
             </p>
         </section>
+        
+        <section>
+            <h2>Delete All Contact Request By Id</h2>
+            <span class="endpoint">
+                <div class="delete_request">DELETE</div>
+                <div class="request_url">
+                    localhost:<span class="port">8000</span>/contact-requests?id={UNIQUE_ID}
+                </div>
+            </span>
+            <p>
+                Make a DELETE request to /contact-requests. Include an id as a query parameter to remove just that entry from the data. 
+            </p>
+        </section>
 
         <section>
             <h2>Restore to Default Contact Request</h2>
@@ -108,7 +139,6 @@
                     localhost:<span class="port">8000</span>/contact-requests?reset=true
                 </div>
             </span>
-
             <p>
                 Make a DELETE request to /contact-requests with the `reset=true` query request
                 parameter to restore data to the default entries. This will clear existing data and
@@ -127,11 +157,40 @@
         </section>
 
         <dialog>
-            <h2>Contact Request Data</h2>
-            <div id="contact_request_data"></div>
-            <button autofocus onclick="showData(false)">Close</button>
-            <button autofocus onclick="refreshTableData()">Refresh</button>
+            <div id="dialog_contents">
+                <div class="dialog_banner">
+                    <h2>Contact Request Data Preview</h2>
+                    <div class="menu" style="display: flex;">
+                        <button autofocus onclick="showServerControls(false)" class="icon_btn" style="background-color: rgb(247, 78, 78);" title="Back" aria-label="back button">
+                            <img style="height: 1rem;" src="./img/x-solid.svg" aria-hidden="true" aria-label="Close" alt="Close dialog">
+                        </button>
+                    </div>
+                </div>
+                <div id="server_control_error"></div>
+                <div id="contact_request_data"></div>
+                <div class="menu">
+                    <button onclick="clearData()" class="icon_btn" style="background-color: rgb(247, 78, 78);" aria-label="destructive, clear data">
+                        <img style="height: 1rem;" src="./img/ban-solid.svg" aria-hidden="true">
+                        <span class="btn_text">
+                            Clear Data
+                        </span>
+                    </button>
+                    <button onclick="resetData()" class="icon_btn" style="background-color: rgb(78, 185, 247);" aria-label="Reset data to default">
+                        <img style="height: 1rem;" src="./img/arrows-rotate-solid.svg" aria-hidden="true">
+                        <span class="btn_text">
+                            Reset Data
+                        </span>
+                    </button>
+                    <button onclick="refreshTableData()" class="icon_btn" style="background-color: rgb(78, 185, 247);" aria-label="refresh table contents">
+                        <img style="height: 1rem;" src="./img/arrow-rotate-left-solid.svg" aria-hidden="true">
+                        <span class="btn_text">
+                            Refresh Table
+                        </span>
+                    </button>
+                </div>
+            </div>
         </dialog>
-        <script src="docs-app.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/serverControls.js"></script>
     </body>
 </html>

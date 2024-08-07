@@ -32,17 +32,23 @@ router.use('/contact-requests', ContactRoutes);
     purposes this is ideal and lets you debug more easily!
  */
 router.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
-    console.error(error);
+    logFormattedError(error);
 
     // If the error is an instance of our internal HTTPError, then use the `code` property from it
     if (error instanceof HTTPError) {
-        res.status(error.code).contentType('text/plain').send(error.stack || error.message);
+        res.status(error.code)
+            .contentType('text/plain')
+            .send(error.stack || error.message);
         next();
         return;
     }
 
     if (error instanceof Error) {
-        res.status(500).contentType('text/plain').send(error.stack || error.message);
+        
+        
+        res.status(500)
+            .contentType('text/plain')
+            .send(error.stack || error.message);
         next();
         return;
     }
@@ -53,3 +59,10 @@ router.use((error: unknown, req: Request, res: Response, next: NextFunction) => 
 
     next();
 });
+
+const logFormattedError = (error: unknown) => {
+    console.log('==========================SERVER ERROR==========================');
+    console.error(error);
+    console.log('\r\nNOTE! This error was handled and the server is still running!');
+    console.log('==========================SERVER ERROR==========================');
+}

@@ -8,9 +8,14 @@ const router: Router = express.Router();
 export default router;
 
 // If a GET request is made to the "contact" route, return all saved contact requests.
-router.get('/', async (req: Request, res: Response) => {
-    const contactRequests = await contactRepository.returnAllContactRequests();
-    res.status(200).json(contactRequests);
+router.get('/', (req: Request, res: Response) => {
+    if (req.query.id) {
+        res.status(200).json(
+            contactRepository.returnContactRequestById(req.query.id as string)
+        );
+    } else {
+        res.status(200).json(contactRepository.returnAllContactRequests());
+    }
 });
 
 // If a POST request is made to the "contact" route, save the supplied contact request.
@@ -21,12 +26,15 @@ router.post('/', async (req: Request, res: Response) => {
 
 // If a DELETE request is made to the "clear" route, clear all data that is stored.
 // If the URL contains the query param ?reset=true, inject the default data to reset the collection!
-router.delete('/', async (req: Request, res: Response) => {
+router.delete('/', (req: Request, res: Response) => {
     if (req.query.reset) {
-        await contactRepository.resetContactData();
+        contactRepository.resetContactData();
         res.status(200).send('Data for contacts successfully reset.');
+    } else if (req.query.id) {
+        contactRepository.deleteContactRequestById(req.query.id as string);
+        res.status(200).send(`Contact request with id ${req.query.id} successfully deleted.`);
     } else {
-        await contactRepository.clearContactData();
+        contactRepository.clearContactData();
         res.status(200).send('Data for contacts successfully cleared.');
     }
 });

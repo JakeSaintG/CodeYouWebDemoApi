@@ -69,8 +69,32 @@ export class ContactRequestsCollection {
         } else if (Env.RETRIEVE_FROM === 'json') {
             return JsonUtils.read();
         } else {
-            throw new Error(`Error in data retrieval configuration. Ensure RETRIEVE_FROM field in .env file is set to "database" or "json".`);
+            throw new Error(
+                'Error in data retrieval configuration. Ensure RETRIEVE_FROM field in .env file is set to "database" or "json".'
+            );
         }
+    };
+
+    public returnContactRequestById = (id: string) => {
+        let contactRequest: ContactRequest | undefined;
+
+        if (Env.RETRIEVE_FROM === 'database') {
+            contactRequest = DbUtils.selectContactRequestById(id);
+        } else if (Env.RETRIEVE_FROM === 'json') {
+            contactRequest = JsonUtils.read().find((c) => c.id === id);
+        } else {
+            throw new Error(
+                'Error in data retrieval configuration. Ensure RETRIEVE_FROM field in .env file is set to "database" or "json".'
+            );
+        }
+
+        if (contactRequest === null || contactRequest === undefined) {
+            throw new Error(
+                `Unable to find find contact requestion with id: ${id}. Please check the ID and try again.`
+            );
+        }
+
+        return contactRequest;
     };
 
     public resetContactData = (): void => {
@@ -89,6 +113,14 @@ export class ContactRequestsCollection {
         DbUtils.deleteContactRequests();
     };
 
+    public deleteContactRequestById = (id: string): void => {
+        // Use a helper function (declared in this file) to remove an object from the JSON file.
+        this.deleteFromJsonById(id);
+        
+        // Perform DELETE statement against database with ID (see dbUtils).
+        DbUtils.deleteContactRequestById(id);
+    };
+
     private resetDb = (newData: ContactRequest[]) => {
         console.log('Dropping and resetting database from template.');
 
@@ -97,5 +129,26 @@ export class ContactRequestsCollection {
 
     private resetJson = (newData: ContactRequest[]) => {
         JsonUtils.write(newData);
+    };
+
+    /*
+    Why doesn't JsonUtils have a deleteById function?
+        - The JsonUtilis/JsonTable functions were made to to perform actions on GENERIC objects in an array.
+        - We can't be sure that a GENERIC object will have an id but we can be sure here after we declare 
+        that the results are JsonTable<ContactRequest>.
+    */
+
+    private deleteFromJsonById = (id: string) => {
+        // Get current state of JSON
+        const contactRequests = JsonUtils.read();
+
+        // Use the ID to find the index of the contact request to delete
+        const indexToRemove = contactRequests.findIndex((item) => item.id === id);
+
+        // Remove item from array using index
+        if (indexToRemove > -1) contactRequests.splice(indexToRemove, 1);
+
+        // Over write JSON file using object with the removed contact request
+        JsonUtils.write(contactRequests);
     };
 }
