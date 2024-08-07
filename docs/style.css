@@ -8,7 +8,8 @@ body {
 }
 
 body:has(dialog[open]) {
-    overflow: hidden;
+    /* Prevents odd scrolling behavior behind the modal */
+    overflow: hidden; 
 }
 
 h1 {
@@ -177,7 +178,7 @@ pre {
 #contact_request_data {
     margin-bottom: 1rem;
     max-height: 66vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #server_control_error {
@@ -201,13 +202,13 @@ table {
 
 td,
 th {
-    border: solid #dddddd 1px;
+    border: solid #c7c6c6 1px;
     text-align: left;
     padding: 8px;
 }
 
 tr:nth-child(even) {
-    background-color: #dddddd;
+    background-color: #e5e3e3;
 }
 
 .centered-cell button {
@@ -235,6 +236,8 @@ button img {
 
 dialog {
     padding: 0;
+    min-width: 33vw;
+    max-width: 100vw;
 }
 
 .dialog_banner {
@@ -300,5 +303,9 @@ dialog {
 @media (min-width: 1821px) {
     nav {
         flex-direction: row;
+    }
+
+    dialog {
+        max-width: 75vw;
     }
 }

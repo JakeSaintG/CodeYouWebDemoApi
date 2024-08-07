@@ -75,6 +75,17 @@ const toggleMobileMenu = () => {
     }
 };
 
+fetch(`./port.json`)
+    .then(async (r) => await r.json())
+    .then((json) => {
+        port = json.port || 8000;
+        document.querySelectorAll('.port').forEach((e) => (e.innerText = port));
+    })
+    .then(() => checkPing())
+    .catch((error) =>
+        console.error(`Unable to retrieve configurable PORT from port.json: ${error}`)
+    );
+
 /*
     <code> element injection; 
     Nesting <code> and <pre> tags can make the HTML file can look nasty.
@@ -91,19 +102,6 @@ const toggleMobileMenu = () => {
     addScreenReadOnlyElement(postResetJson, 'JSON code block for ');
     postResetJson.innerText = JSON.stringify(postRequestExample, null, 4);
     document.getElementById('post_request').appendChild(postResetJson);
-})();
-
-(() => {
-    fetch(`port.json`)
-        .then(async (r) => await r.json())
-        .then((json) => {
-            port = json.port || 8000;
-            document.querySelectorAll('.port').forEach((e) => (e.innerText = port));
-        })
-        .then(() => checkPing())
-        .catch((error) =>
-            console.error(`Unable to retrieve configurable PORT from port.json: ${error}`)
-        );
 })();
 
 addEventListener('resize', () => {

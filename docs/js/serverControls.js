@@ -51,7 +51,7 @@ const resetData = () =>
         .catch((error) => showServerControlError(error));
 
 const refreshTableData = () => {
-    contactRequestData.innerHTML = '';
+    contactRequestData.innerHTML = ''; //Clear anything that may already be there.
     getData();
 };
 
@@ -66,7 +66,7 @@ const showServerControlError = (error) => {
 
     const closeError = document.createElement('a');
     closeError.onclick = () => hideServerControlError();
-    closeError.href = '#';
+    closeError.href = '#!';
     closeError.ariaLabel = 'Close error message.'
     closeError.innerText = 'close error';
 
