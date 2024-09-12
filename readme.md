@@ -1,5 +1,5 @@
 # Contacts API
-This ContactRequest API have been developed for the purpose of giving Code:YOU students a local API to practice working with.
+This ContactRequest API has been developed for the purpose of giving Code:YOU students a local API to practice working with.
 
 ## Synopsis
 You have been tasked with developing a web page for an artist that would like interested parties to contact them about various art pieces. They had a backend developer set up this Contact Request API for them and have supplied this GitHub repository for you to work with. You have complete creative freedom for styling this contact request form! Best of luck!

@@ -11,7 +11,7 @@ router.get('/', (req: Request, res: Response) => {
     res.send('Code:You API Demo');
 });
 
-// If a GET request is made to the /ping route, return 'healthy'.
+// If a GET request is made to the /ping route, simply return a 200 (success).
 router.get('/ping', (req: Request, res: Response) => {
     res.send();
 });
