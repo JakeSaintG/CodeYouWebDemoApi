@@ -44,8 +44,6 @@ router.use((error: unknown, req: Request, res: Response, next: NextFunction) => 
     }
 
     if (error instanceof Error) {
-        
-        
         res.status(500)
             .contentType('text/plain')
             .send(error.stack || error.message);
@@ -61,8 +59,8 @@ router.use((error: unknown, req: Request, res: Response, next: NextFunction) => 
 });
 
 const logFormattedError = (error: unknown) => {
-    console.log('==========================SERVER ERROR==========================');
+    console.log('==============================SERVER ERROR==============================');
     console.error(error);
-    console.log('\r\nNOTE! This error was handled and the server is still running!');
-    console.log('==========================SERVER ERROR==========================');
+    console.log('\r\nSTUDENT NOTE! This error was handled and the server is still running!');
+    console.log('==============================SERVER ERROR==============================');
 }
