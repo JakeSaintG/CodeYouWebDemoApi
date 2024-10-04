@@ -134,8 +134,8 @@ export class ContactRequestsCollection {
     /*
     Why doesn't JsonUtils have a deleteById function?
         - The JsonUtilis/JsonTable functions were made to to perform actions on GENERIC objects in an array.
-        - We can't be sure that a GENERIC object will have an id but we can be sure here after we declare 
-        that the results are JsonTable<ContactRequest>.
+        - We can't be sure that a GENERIC object will have an id but we can be sure "outside" of the utils. After 
+        we declare that the results are of type: JsonTable<ContactRequest>.
     */
 
     private deleteFromJsonById = (id: string) => {
