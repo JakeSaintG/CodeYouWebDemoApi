@@ -42,13 +42,15 @@ const pingServer = () =>
             serverStatus.innerText = `Error: ${error}`;
         });
 
-// Usually, we wouldn't want to show a user the exact error message.
+// For security purposes, we don't usually want to show a user the exact error message.
+// Doing so can give bad-actors information about your application that they can exploit.
 // In this case, for this developer education tool, we'll break that rule.
 const showServerHealth = (serverOnline, additionalData) => {
     if (!serverPreviouslyHealthy && serverOnline === 'healthy') {
         serverPreviouslyHealthy = true;
 
-        // Removing an element class that may not exist is "safe". No need to check element.classList before removing.
+        // Removing an element class that may not exist is "safe" and does not result in an error. 
+        // This means that there is no need to check element.classList before removing.
         serverStatus.parentElement.classList.remove('server_unhealthy', 'server_warning');
         serverStatus.parentElement.classList.add('server_healthy');
     } else if (!serverPreviouslyHealthy && serverOnline === 'warning') {
@@ -87,7 +89,7 @@ fetch(`./port.json`)
     );
 
 /*
-    <code> element injection; 
+    Here is chose to inject code into the <code> element. 
     Nesting <code> and <pre> tags can make the HTML file can look nasty.
 */ 
 (() => {
@@ -104,6 +106,8 @@ fetch(`./port.json`)
     document.getElementById('post_request').appendChild(postResetJson);
 })();
 
+// This prevents odd behavior with the nav menu if the user were to close it in
+// mobile view and then expand the window.
 addEventListener('resize', () => {
     if (window.innerWidth > 769) {
         document.querySelector('nav').style.display = 'flex';

@@ -157,7 +157,7 @@ dialog.addEventListener('click', (event) => {
         This closes the dialog if the area outside of it is clicked.
 
         When a dialog is open, its margin takes up the rest of the screen, so clicking outside 
-        of it is still considered clicking the dialog element.
+        of it is still technically considered clicking the dialog element.
         The visible dialog has a nested div that takes up the whole dialog content so clicking there 
         is not considered the dialog element itself.
     */
