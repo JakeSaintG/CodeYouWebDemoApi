@@ -7,7 +7,7 @@ import { Env } from './env';
 import Routes from './routes';
 
 // Spin up an express server instance and enable all CORS Requests.
-// For more informaton on the CORS package, see here: https://expressjs.com/en/resources/middleware/cors.html
+// For more informaton on the CORS package, go here: https://expressjs.com/en/resources/middleware/cors.html
 const app: Express = express();
 app.use(express.json());
 app.use(cors());
