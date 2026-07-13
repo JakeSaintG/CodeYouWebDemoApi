@@ -51,7 +51,7 @@ If an error comes up regarding the default port already being in use on a Window
 - Take note of the process ID (PID). This is what you will look for in Task Manager to identify the process to terminate.
 - Open Task Manager:
   - Make sure "More details" is expanded (bottom left)
-  - Go to the "Details" tap and look in the list for the process ID (PID) in the previous step. The process name should be "node.exe".
+  - Go to the "Details" tab and look in the list for the process ID (PID) in the previous step. The process name should be "node.exe".
 	- **If you do not see a PID column, it can be added by right clicking on the columns, clicking "Select columns", and adding "PID".**
 - Right click on this node.exe process and select "End Process". Confirm and attempt to start the API again.
 
